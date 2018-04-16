@@ -68,11 +68,13 @@
 # $Revision: 6.4 $ 3/22/17 added check for section already occupied in case of lost track contact
 # $Revision: 6.5 $ 4/04/17 changed Estop to regular Stop (drifting) going into section 106, turned lights off when exiting or all stopped, fixed allStop to leave loop so not more trolleys will start moving afterwards
 # $Revision: 6.6 $ 4/05/17 added long stop, adjust sending stop msgs to only occur when running
-# $Revision: 6.7 $ 4/15/17 added missing global array for sendLnMsg ARGS
+# $Revision: 6.7 $ 4/15/17 added missing global array for sendLnMsg ARGS and completely separated ATS from LnScan
 # $Revision: 6.8 $ 4/20/17 fixed 0xE7 msg filter by moving it before filling ARGS array
 # $Revision: 6.9 $ 4/26/17 added sending all stop message to console
 # $Revision: 7.0 $ 5/01/17 reactivate track contact bounce protection
-apNameVersion = "Automatic Trolley Sequencer - v7.0"
+#
+# $Revision: 10.0 $ 2/15/18 Start of new series for 4 trolleys and an expanded number of BODs
+apNameVersion = "Automatic Trolley Sequencer - v10.0"
 
 import jmri
 import java
@@ -82,7 +84,6 @@ import time
 
 fus = jmri.util.FileUtilSupport()
 trolleyAddressesFile = fus.getUserFilesPath() + "saveTaddresses.cfg"
-print "Using the following trolleyAddressFile:", trolleyAddressesFile
 #trolleyAddressesFile = "C:\Users\wolfsong\JMRI\My_JMRI_Railroad\saveTaddresses.cfg"
 #trolleyAddressesFile = "C:\Users\NVMR\JMRI\PanelPro\saveTaddresses.cfg"
 #trolleyAddressesFile = 'preference:\saveTaddresses.cfg'
@@ -128,21 +129,21 @@ log = LoggerFactory.getLogger("LnScanner")
 import array
 
 mainStartTime = "[init started]" + time.strftime('%X %x %Z')
-print "mainStartTime = ", mainStartTime
+
 import thread
 killed = False #run background task until set true
 resyncInProgress = False #go true when resync button pressed
 checkRestoreDone = True
 #reset after 15 seconds and restore speak checkbox values
 resyncStrtTime = time.clock() #seed time at app start
-print 'seed value of resyncStrtTime = ', resyncStrtTime
+####print 'seed value of resyncStrtTime = ', resyncStrtTime
 
 #from threading import Thread
 #from java.lang import InterruptedException, Runnable, Thread
 #from java.beans import PropertyChangeListener
 #from java.util.concurrent import ExecutionException
 #from javax.swing import SwingWorker, SwingUtilities
-print 'Imports for org.jfree'
+
 # imports for stripchart portion
 import os;
 # from org.jfree.chart import ChartColor
@@ -166,9 +167,9 @@ import os;
 # from org.jfree.ui import ApplicationFrame
 # from org.jfree.ui import RefineryUtilities
 # from org.jfree.util import ShapeUtilities
-print "Imports from Trolley"
+
 #from trolley import Trolley
-print "After Imports from Trolley"
+
 trolleyLocs = [00,00,00,00,00,00,00,00,00] # filled later with slotID of each trolley
 trolleyMove = [35,35,35,35,35,35,35,35,35] # 35 '#' = empty, 83 'S' = stopped, 82 'R' = running
 motionState = {} #dictionary for throttle state of each trolley, value is '0' = stopped or '1' = running
@@ -216,7 +217,75 @@ Trolley3NotOut = True
 
 suspended = False
 
-print "Done with variable section"
+# ****************************************************************
+# ************* Section to get and set trolley state parameters. *
+# ****************************************************************
+class Trolley(object):
+
+    # NORTH = 0
+    # EAST = 1
+    # SOUTH = 2
+    # WEST = 3
+
+    def __init__(self, cSection=-1, nSection=-1, tpriority=1, tslotID=-1, tspeed=-1):
+        self.currSection = curSection
+        self.nextSection = nxtSection
+        self.priority = tpriority
+        self.slotID = tslotID
+        self.speed = tspeed
+        
+    def getCurrSection(self):
+        return (self.currSection)
+        
+    def setCurrSection(self, cSection):
+        self.currSection = cSection
+        
+    def getNextSection(self):
+        return (self.nextSection)
+        
+    def setNextSection(self, nSection):
+        self.nextSection = nSection
+        
+    def getPriority(self):
+        return (self.priority)
+        
+    def setPriority(self, tpriority):
+        self.priority = tpriority
+        
+    def getTslotID(self):
+        return (self.slotID)
+        
+    def setTslotID(self, tslotID):
+        self.slotID = tslotID
+        
+    def getTspeed(self):
+        return (self.speed)
+        
+    def setTspeed(self, tspeed):
+        self.speed = tspeed
+    
+
+    # def turn_right(self):
+        # self.direction += 1
+        # self.direction = self.direction % 4
+
+    # def turn_left(self):
+        # self.direction -= 1
+        # self.direction = self.direction % 4
+
+    # def move(self, distance):
+        # if self.direction == self.NORTH:
+            # self.y += distance
+        # elif self.direction == self.SOUTH:
+            # self.y -= distance
+        # elif self.direction == self.EAST:
+            # self.x += distance
+        # else:
+            # self.x -= distance
+
+    # def position(self):
+        # return (self.x, self.y)
+		
 # *****************************************************************************************
 # ************* Section to Listen to all sensors, printing a line when they change state. *
 # *****************************************************************************************
@@ -262,8 +331,7 @@ class SensorListener(java.beans.PropertyChangeListener):
             # display and/or speak if either range value is empty
             snrStatusArr[systemName] = event.newValue
         return
-     
-print "Defining Listener"   
+        
 listener = SensorListener()
 
 # **********************************************************************
@@ -455,8 +523,7 @@ class WinListener(java.awt.event.WindowListener):
         
     def windowDeiconified(self, event):
         return
-
-print "Up to parseMsg"        
+        
 # *************************************
 #create a Llnmon to parse the message *
 # *************************************
@@ -1358,11 +1425,11 @@ class MsgListener(jmri.jmrix.loconet.LocoNetListener):
                     print ATSmsg
                     scrollArea.setText(scrollArea.getText() + ATSmsg + "\n")
                     # this is where you select the voice synthesizer (speak, espeak, or nircmd)
-                    ##if snSpkChgCheckBox.isSelected():
+                    if snSpkChgCheckBox.isSelected():
                         #pid = java.lang.Runtime.getRuntime().exec(["speak", msg])
                         # #pid = java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
-                        ##pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + ATSmsg + '" -2 100')
-                        ##pid.waitFor()
+                        pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + ATSmsg + '" -2 100')
+                        pid.waitFor()
                         
         if oTrace : print "<<==exiting MsgListener"
         inE7 = False
