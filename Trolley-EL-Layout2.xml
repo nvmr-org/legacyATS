@@ -1,0 +1,2688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/xml/XSLT/panelfile-2-9-6.xsl" type="text/xsl"?>
+<layout-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://jmri.org/xml/schema/layout-2-9-6.xsd">
+  <jmriversion>
+    <major>4</major>
+    <minor>4</minor>
+    <test>0</test>
+    <modifier />
+  </jmriversion>
+  <sensors class="jmri.jmrix.loconet.configurexml.LnSensorManagerXml">
+    <sensor systemName="LS1" inverted="false">
+      <systemName>LS1</systemName>
+    </sensor>
+    <sensor systemName="LS10" inverted="false">
+      <systemName>LS10</systemName>
+    </sensor>
+    <sensor systemName="LS100" inverted="false" userName="Short Detector 100">
+      <systemName>LS100</systemName>
+      <userName>Short Detector 100</userName>
+      <comment>Trolley Thomas Loop</comment>
+    </sensor>
+    <sensor systemName="LS101" inverted="false" userName="Short Detector 101">
+      <systemName>LS101</systemName>
+      <userName>Short Detector 101</userName>
+      <comment>Trolley Aisle Main</comment>
+    </sensor>
+    <sensor systemName="LS102" inverted="false" userName="Short Detector 102">
+      <systemName>LS102</systemName>
+      <userName>Short Detector 102</userName>
+      <comment>Trolley Single Track Northend</comment>
+    </sensor>
+    <sensor systemName="LS103" inverted="false" userName="Short Detector 103">
+      <systemName>LS103</systemName>
+      <userName>Short Detector 103</userName>
+      <comment>Trolley Spencer Loop Return</comment>
+    </sensor>
+    <sensor systemName="LS104" inverted="false" userName="Short Detector 104">
+      <systemName>LS104</systemName>
+      <userName>Short Detector 104</userName>
+      <comment>Trolley Spencer Loop Entry</comment>
+    </sensor>
+    <sensor systemName="LS105" inverted="false" userName="Short Detector 105">
+      <systemName>LS105</systemName>
+      <userName>Short Detector 105</userName>
+      <comment>Trolley Single Track Southend</comment>
+    </sensor>
+    <sensor systemName="LS106" inverted="false" userName="Short Detector 106">
+      <systemName>LS106</systemName>
+      <userName>Short Detector 106</userName>
+      <comment>Trolley Town Main</comment>
+    </sensor>
+    <sensor systemName="LS107" inverted="false" userName="Short Detector 107">
+      <systemName>LS107</systemName>
+      <userName>Short Detector 107</userName>
+      <comment>Trolley 107 Unused</comment>
+    </sensor>
+    <sensor systemName="LS11" inverted="false">
+      <systemName>LS11</systemName>
+    </sensor>
+    <sensor systemName="LS12" inverted="false">
+      <systemName>LS12</systemName>
+    </sensor>
+    <sensor systemName="LS13" inverted="false">
+      <systemName>LS13</systemName>
+    </sensor>
+    <sensor systemName="LS14" inverted="false">
+      <systemName>LS14</systemName>
+    </sensor>
+    <sensor systemName="LS15" inverted="false">
+      <systemName>LS15</systemName>
+    </sensor>
+    <sensor systemName="LS16" inverted="false">
+      <systemName>LS16</systemName>
+    </sensor>
+    <sensor systemName="LS17" inverted="false">
+      <systemName>LS17</systemName>
+    </sensor>
+    <sensor systemName="LS18" inverted="false">
+      <systemName>LS18</systemName>
+    </sensor>
+    <sensor systemName="LS19" inverted="false">
+      <systemName>LS19</systemName>
+    </sensor>
+    <sensor systemName="LS1985" inverted="false">
+      <systemName>LS1985</systemName>
+    </sensor>
+    <sensor systemName="LS1986" inverted="false">
+      <systemName>LS1986</systemName>
+    </sensor>
+    <sensor systemName="LS1987" inverted="false">
+      <systemName>LS1987</systemName>
+    </sensor>
+    <sensor systemName="LS1988" inverted="false">
+      <systemName>LS1988</systemName>
+    </sensor>
+    <sensor systemName="LS1989" inverted="false">
+      <systemName>LS1989</systemName>
+    </sensor>
+    <sensor systemName="LS1990" inverted="false">
+      <systemName>LS1990</systemName>
+    </sensor>
+    <sensor systemName="LS1991" inverted="false">
+      <systemName>LS1991</systemName>
+    </sensor>
+    <sensor systemName="LS1992" inverted="false">
+      <systemName>LS1992</systemName>
+    </sensor>
+    <sensor systemName="LS1993" inverted="false">
+      <systemName>LS1993</systemName>
+    </sensor>
+    <sensor systemName="LS1994" inverted="false">
+      <systemName>LS1994</systemName>
+    </sensor>
+    <sensor systemName="LS1995" inverted="false">
+      <systemName>LS1995</systemName>
+    </sensor>
+    <sensor systemName="LS1996" inverted="false">
+      <systemName>LS1996</systemName>
+    </sensor>
+    <sensor systemName="LS1997" inverted="false">
+      <systemName>LS1997</systemName>
+    </sensor>
+    <sensor systemName="LS1998" inverted="false">
+      <systemName>LS1998</systemName>
+    </sensor>
+    <sensor systemName="LS1999" inverted="false">
+      <systemName>LS1999</systemName>
+    </sensor>
+    <sensor systemName="LS2" inverted="false">
+      <systemName>LS2</systemName>
+    </sensor>
+    <sensor systemName="LS20" inverted="false">
+      <systemName>LS20</systemName>
+    </sensor>
+    <sensor systemName="LS2000" inverted="false">
+      <systemName>LS2000</systemName>
+    </sensor>
+    <sensor systemName="LS2001" inverted="false">
+      <systemName>LS2001</systemName>
+    </sensor>
+    <sensor systemName="LS2002" inverted="false">
+      <systemName>LS2002</systemName>
+    </sensor>
+    <sensor systemName="LS2003" inverted="false">
+      <systemName>LS2003</systemName>
+    </sensor>
+    <sensor systemName="LS2004" inverted="false">
+      <systemName>LS2004</systemName>
+    </sensor>
+    <sensor systemName="LS2005" inverted="false">
+      <systemName>LS2005</systemName>
+    </sensor>
+    <sensor systemName="LS2006" inverted="false">
+      <systemName>LS2006</systemName>
+    </sensor>
+    <sensor systemName="LS2007" inverted="false">
+      <systemName>LS2007</systemName>
+    </sensor>
+    <sensor systemName="LS2008" inverted="false">
+      <systemName>LS2008</systemName>
+    </sensor>
+    <sensor systemName="LS2017" inverted="false">
+      <systemName>LS2017</systemName>
+    </sensor>
+    <sensor systemName="LS2018" inverted="false">
+      <systemName>LS2018</systemName>
+    </sensor>
+    <sensor systemName="LS2019" inverted="false">
+      <systemName>LS2019</systemName>
+    </sensor>
+    <sensor systemName="LS2020" inverted="false">
+      <systemName>LS2020</systemName>
+    </sensor>
+    <sensor systemName="LS2021" inverted="false">
+      <systemName>LS2021</systemName>
+    </sensor>
+    <sensor systemName="LS2022" inverted="false">
+      <systemName>LS2022</systemName>
+    </sensor>
+    <sensor systemName="LS2023" inverted="false">
+      <systemName>LS2023</systemName>
+    </sensor>
+    <sensor systemName="LS2024" inverted="false">
+      <systemName>LS2024</systemName>
+    </sensor>
+    <sensor systemName="LS2025" inverted="false">
+      <systemName>LS2025</systemName>
+    </sensor>
+    <sensor systemName="LS2026" inverted="false">
+      <systemName>LS2026</systemName>
+    </sensor>
+    <sensor systemName="LS2027" inverted="false">
+      <systemName>LS2027</systemName>
+    </sensor>
+    <sensor systemName="LS2028" inverted="false">
+      <systemName>LS2028</systemName>
+    </sensor>
+    <sensor systemName="LS2029" inverted="false">
+      <systemName>LS2029</systemName>
+    </sensor>
+    <sensor systemName="LS2030" inverted="false">
+      <systemName>LS2030</systemName>
+    </sensor>
+    <sensor systemName="LS2031" inverted="false">
+      <systemName>LS2031</systemName>
+    </sensor>
+    <sensor systemName="LS2032" inverted="false">
+      <systemName>LS2032</systemName>
+    </sensor>
+    <sensor systemName="LS2033" inverted="false">
+      <systemName>LS2033</systemName>
+    </sensor>
+    <sensor systemName="LS2034" inverted="false">
+      <systemName>LS2034</systemName>
+    </sensor>
+    <sensor systemName="LS2035" inverted="false">
+      <systemName>LS2035</systemName>
+    </sensor>
+    <sensor systemName="LS2036" inverted="false">
+      <systemName>LS2036</systemName>
+    </sensor>
+    <sensor systemName="LS2037" inverted="false">
+      <systemName>LS2037</systemName>
+    </sensor>
+    <sensor systemName="LS2038" inverted="false">
+      <systemName>LS2038</systemName>
+    </sensor>
+    <sensor systemName="LS2039" inverted="false">
+      <systemName>LS2039</systemName>
+    </sensor>
+    <sensor systemName="LS2040" inverted="false">
+      <systemName>LS2040</systemName>
+    </sensor>
+    <sensor systemName="LS2041" inverted="false">
+      <systemName>LS2041</systemName>
+    </sensor>
+    <sensor systemName="LS2042" inverted="false">
+      <systemName>LS2042</systemName>
+    </sensor>
+    <sensor systemName="LS2043" inverted="false">
+      <systemName>LS2043</systemName>
+    </sensor>
+    <sensor systemName="LS2044" inverted="false">
+      <systemName>LS2044</systemName>
+    </sensor>
+    <sensor systemName="LS2045" inverted="false">
+      <systemName>LS2045</systemName>
+    </sensor>
+    <sensor systemName="LS2046" inverted="false">
+      <systemName>LS2046</systemName>
+    </sensor>
+    <sensor systemName="LS2047" inverted="false">
+      <systemName>LS2047</systemName>
+    </sensor>
+    <sensor systemName="LS2048" inverted="false">
+      <systemName>LS2048</systemName>
+    </sensor>
+    <sensor systemName="LS21" inverted="false">
+      <systemName>LS21</systemName>
+    </sensor>
+    <sensor systemName="LS22" inverted="false">
+      <systemName>LS22</systemName>
+    </sensor>
+    <sensor systemName="LS23" inverted="false">
+      <systemName>LS23</systemName>
+    </sensor>
+    <sensor systemName="LS24" inverted="false">
+      <systemName>LS24</systemName>
+    </sensor>
+    <sensor systemName="LS25" inverted="false">
+      <systemName>LS25</systemName>
+    </sensor>
+    <sensor systemName="LS26" inverted="false">
+      <systemName>LS26</systemName>
+    </sensor>
+    <sensor systemName="LS27" inverted="false">
+      <systemName>LS27</systemName>
+    </sensor>
+    <sensor systemName="LS28" inverted="false">
+      <systemName>LS28</systemName>
+    </sensor>
+    <sensor systemName="LS29" inverted="false">
+      <systemName>LS29</systemName>
+    </sensor>
+    <sensor systemName="LS3" inverted="false">
+      <systemName>LS3</systemName>
+    </sensor>
+    <sensor systemName="LS30" inverted="false">
+      <systemName>LS30</systemName>
+    </sensor>
+    <sensor systemName="LS3000" inverted="false" userName="Short Alert System Ready">
+      <systemName>LS3000</systemName>
+      <userName>Short Alert System Ready</userName>
+      <comment>NVMR Short Alert System is ready, All aboard!</comment>
+    </sensor>
+    <sensor systemName="LS31" inverted="false">
+      <systemName>LS31</systemName>
+    </sensor>
+    <sensor systemName="LS3101" inverted="false" userName="Short Detector 3101">
+      <systemName>LS3101</systemName>
+      <userName>Short Detector 3101</userName>
+      <comment>Salisbury to Atlanta Red Line Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3180" inverted="false" userName="Short Detector 3180">
+      <systemName>LS3180</systemName>
+      <userName>Short Detector 3180</userName>
+      <comment>Old Fort Ethan Allen Industries Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3181" inverted="false">
+      <systemName>LS3181</systemName>
+    </sensor>
+    <sensor systemName="LS3182" inverted="false">
+      <systemName>LS3182</systemName>
+    </sensor>
+    <sensor systemName="LS3183" inverted="false">
+      <systemName>LS3183</systemName>
+    </sensor>
+    <sensor systemName="LS3184" inverted="false" userName="Short Detector 3184">
+      <systemName>LS3184</systemName>
+      <userName>Short Detector 3184</userName>
+      <comment>Old Fort Main Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3185" inverted="false" userName="Short Detector 3185">
+      <systemName>LS3185</systemName>
+      <userName>Short Detector 3185</userName>
+      <comment>Old Fort South Side Industries Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3186" inverted="false" userName="Short Detector 3186">
+      <systemName>LS3186</systemName>
+      <userName>Short Detector 3186</userName>
+      <comment>Old Fort Passing Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3187" inverted="false" userName="Short Detector 3187">
+      <systemName>LS3187</systemName>
+      <userName>Short Detector 3187</userName>
+      <comment>Old Fort North Side Industries Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3188" inverted="false">
+      <systemName>LS3188</systemName>
+    </sensor>
+    <sensor systemName="LS3189" inverted="false">
+      <systemName>LS3189</systemName>
+    </sensor>
+    <sensor systemName="LS3190" inverted="false">
+      <systemName>LS3190</systemName>
+    </sensor>
+    <sensor systemName="LS3191" inverted="false">
+      <systemName>LS3191</systemName>
+    </sensor>
+    <sensor systemName="LS3192" inverted="false">
+      <systemName>LS3192</systemName>
+    </sensor>
+    <sensor systemName="LS3193" inverted="false">
+      <systemName>LS3193</systemName>
+    </sensor>
+    <sensor systemName="LS3194" inverted="false">
+      <systemName>LS3194</systemName>
+    </sensor>
+    <sensor systemName="LS3195" inverted="false">
+      <systemName>LS3195</systemName>
+    </sensor>
+    <sensor systemName="LS32" inverted="false">
+      <systemName>LS32</systemName>
+    </sensor>
+    <sensor systemName="LS3203" inverted="false" userName="Short Detector 3203">
+      <systemName>LS3203</systemName>
+      <userName>Short Detector 3203</userName>
+      <comment>Spencer Yard Main line Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3204" inverted="false" userName="Short Detector 3204">
+      <systemName>LS3204</systemName>
+      <userName>Short Detector 3204</userName>
+      <comment>Spencer Yard Unused Shorted (currently unwired)</comment>
+    </sensor>
+    <sensor systemName="LS3205" inverted="false" userName="Short Detector 3205">
+      <systemName>LS3205</systemName>
+      <userName>Short Detector 3205</userName>
+      <comment>WNC North thru Spencer Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3206" inverted="false" userName="Short Detector 3206">
+      <systemName>LS3206</systemName>
+      <userName>Short Detector 3206</userName>
+      <comment>WNC South thru Spencer Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3207" inverted="false" userName="Short Detector 3207">
+      <systemName>LS3207</systemName>
+      <userName>Short Detector 3207</userName>
+      <comment>Steam Locomotive Service Tracks Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3289" inverted="false" userName="Short Detector 3289">
+      <systemName>LS3289</systemName>
+      <userName>Short Detector 3289</userName>
+      <comment>Helix, Asheville to Washington Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3290" inverted="false">
+      <systemName>LS3290</systemName>
+    </sensor>
+    <sensor systemName="LS3291" inverted="false">
+      <systemName>LS3291</systemName>
+    </sensor>
+    <sensor systemName="LS3292" inverted="false">
+      <systemName>LS3292</systemName>
+    </sensor>
+    <sensor systemName="LS3293" inverted="false">
+      <systemName>LS3293</systemName>
+    </sensor>
+    <sensor systemName="LS3294" inverted="false">
+      <systemName>LS3294</systemName>
+    </sensor>
+    <sensor systemName="LS3295" inverted="false">
+      <systemName>LS3295</systemName>
+    </sensor>
+    <sensor systemName="LS33" inverted="false">
+      <systemName>LS33</systemName>
+    </sensor>
+    <sensor systemName="LS3301" inverted="false" userName="Short Detector 3301">
+      <systemName>LS3301</systemName>
+      <userName>Short Detector 3301</userName>
+      <comment>Majolica West End Single Track Shorted ???</comment>
+    </sensor>
+    <sensor systemName="LS3380" inverted="false" userName="Short Detector 3380">
+      <systemName>LS3380</systemName>
+      <userName>Short Detector 3380</userName>
+      <comment>Diesel Locomotive Service Tracks Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3381" inverted="false" userName="Short Detector 3381">
+      <systemName>LS3381</systemName>
+      <userName>Short Detector 3381</userName>
+      <comment>Roundhouse Tracks Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3382" inverted="false" userName="Short Detector 3382">
+      <systemName>LS3382</systemName>
+      <userName>Short Detector 3382</userName>
+      <comment>Salisbury Blue Line Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3383" inverted="false">
+      <systemName>LS3383</systemName>
+    </sensor>
+    <sensor systemName="LS3384" inverted="false">
+      <systemName>LS3384</systemName>
+    </sensor>
+    <sensor systemName="LS3385" inverted="false">
+      <systemName>LS3385</systemName>
+    </sensor>
+    <sensor systemName="LS3386" inverted="false">
+      <systemName>LS3386</systemName>
+    </sensor>
+    <sensor systemName="LS3387" inverted="false">
+      <systemName>LS3387</systemName>
+    </sensor>
+    <sensor systemName="LS3388" inverted="false" userName="Short Detector 3388">
+      <systemName>LS3388</systemName>
+      <userName>Short Detector 3388</userName>
+      <comment>Track 5 or 6 or the Y, North End Spencer Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3389" inverted="false" userName="Short Detector 3389">
+      <systemName>LS3389</systemName>
+      <userName>Short Detector 3389</userName>
+      <comment>Track 5 or 6, South End Spencer Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3390" inverted="false" userName="Short Detector 3390">
+      <systemName>LS3390</systemName>
+      <userName>Short Detector 3390</userName>
+      <comment>Spencer Yard South Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3391" inverted="false" userName="Short Detector 3391">
+      <systemName>LS3391</systemName>
+      <userName>Short Detector 3391</userName>
+      <comment>Spencer Yard North Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3392" inverted="false">
+      <systemName>LS3392</systemName>
+    </sensor>
+    <sensor systemName="LS3393" inverted="false">
+      <systemName>LS3393</systemName>
+    </sensor>
+    <sensor systemName="LS3394" inverted="false">
+      <systemName>LS3394</systemName>
+    </sensor>
+    <sensor systemName="LS3395" inverted="false">
+      <systemName>LS3395</systemName>
+    </sensor>
+    <sensor systemName="LS34" inverted="false">
+      <systemName>LS34</systemName>
+    </sensor>
+    <sensor systemName="LS3403" inverted="false" userName="Short Detector 3403">
+      <systemName>LS3403</systemName>
+      <userName>Short Detector 3403</userName>
+      <comment>Statesville Industrial Tracks Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3409" inverted="false" userName="Short Detector 3409">
+      <systemName>LS3409</systemName>
+      <userName>Short Detector 3409</userName>
+      <comment>Creosote Plant Track Shorted (needed)</comment>
+    </sensor>
+    <sensor systemName="LS3480" inverted="false" userName="Short Detector 3480">
+      <systemName>LS3480</systemName>
+      <userName>Short Detector 3480</userName>
+      <comment>Statesville Main Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3481" inverted="false" userName="Short Detector 3481">
+      <systemName>LS3481</systemName>
+      <userName>Short Detector 3481</userName>
+      <comment>Statesville Passing Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3482" inverted="false" userName="Short Detector 3482">
+      <systemName>LS3482</systemName>
+      <userName>Short Detector 3482</userName>
+      <comment>Clinch Cross Main Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3483" inverted="false" userName="Short Detector 3483">
+      <systemName>LS3483</systemName>
+      <userName>Short Detector 3483</userName>
+      <comment>Clinch Cross Passing Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3484" inverted="false" userName="Short Detector 3484">
+      <systemName>LS3484</systemName>
+      <userName>Short Detector 3484</userName>
+      <comment>Trolley Statesville Interchange Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3485" inverted="false" userName="Short Detector 3485">
+      <systemName>LS3485</systemName>
+      <userName>Short Detector 3485</userName>
+      <comment>Trolley Black Mountain Loop Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3486" inverted="false" userName="Short Detector 3486">
+      <systemName>LS3486</systemName>
+      <userName>Short Detector 3486</userName>
+      <comment>Trolley Cheer Wine Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3487" inverted="false" userName="Short Detector 3487">
+      <systemName>LS3487</systemName>
+      <userName>Short Detector 3487</userName>
+      <comment>Main Line Statesville to Clinch Cross Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3488" inverted="false">
+      <systemName>LS3488</systemName>
+    </sensor>
+    <sensor systemName="LS3489" inverted="false">
+      <systemName>LS3489</systemName>
+    </sensor>
+    <sensor systemName="LS3490" inverted="false">
+      <systemName>LS3490</systemName>
+    </sensor>
+    <sensor systemName="LS3491" inverted="false">
+      <systemName>LS3491</systemName>
+    </sensor>
+    <sensor systemName="LS3492" inverted="false">
+      <systemName>LS3492</systemName>
+    </sensor>
+    <sensor systemName="LS3493" inverted="false">
+      <systemName>LS3493</systemName>
+    </sensor>
+    <sensor systemName="LS3494" inverted="false">
+      <systemName>LS3494</systemName>
+    </sensor>
+    <sensor systemName="LS3495" inverted="false">
+      <systemName>LS3495</systemName>
+    </sensor>
+    <sensor systemName="LS35" inverted="false">
+      <systemName>LS35</systemName>
+    </sensor>
+    <sensor systemName="LS3502" inverted="false" userName="Short Detector 3502">
+      <systemName>LS3502</systemName>
+      <userName>Short Detector 3502</userName>
+      <comment>Helix or Switches above Washington Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3503" inverted="false" userName="Short Detector 3503">
+      <systemName>LS3503</systemName>
+      <userName>Short Detector 3503</userName>
+      <comment>Right thru Loop or Turnouts above Atlanta Shorted ???</comment>
+    </sensor>
+    <sensor systemName="LS3504" inverted="false" userName="Short Detector 3504">
+      <systemName>LS3504</systemName>
+      <userName>Short Detector 3504</userName>
+      <comment>Helix between Asheville and Washington Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3580" inverted="false" userName="Short Detector 3580">
+      <systemName>LS3580</systemName>
+      <userName>Short Detector 3580</userName>
+      <comment>Trolley Barn Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3581" inverted="false" userName="Short Detector 3581">
+      <systemName>LS3581</systemName>
+      <userName>Short Detector 3581</userName>
+      <comment>Trolley Salisbury Double to Single Frog Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3582" inverted="false">
+      <systemName>LS3582</systemName>
+    </sensor>
+    <sensor systemName="LS3583" inverted="false">
+      <systemName>LS3583</systemName>
+    </sensor>
+    <sensor systemName="LS3584" inverted="false">
+      <systemName>LS3584</systemName>
+    </sensor>
+    <sensor systemName="LS3585" inverted="false">
+      <systemName>LS3585</systemName>
+    </sensor>
+    <sensor systemName="LS3586" inverted="false">
+      <systemName>LS3586</systemName>
+    </sensor>
+    <sensor systemName="LS3587" inverted="false">
+      <systemName>LS3587</systemName>
+    </sensor>
+    <sensor systemName="LS3588" inverted="false" userName="Short Detector 3588">
+      <systemName>LS3588</systemName>
+      <userName>Short Detector 3588</userName>
+      <comment>Trolley Single Track Spencer Junction Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3589" inverted="false" userName="Short Detector 3589">
+      <systemName>LS3589</systemName>
+      <userName>Short Detector 3589</userName>
+      <comment>Trolley Thomas Loop Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3590" inverted="false" userName="Short Detector 3590">
+      <systemName>LS3590</systemName>
+      <userName>Short Detector 3590</userName>
+      <comment>Trolley Mainline Aisle Side Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3591" inverted="false" userName="Short Detector 3591">
+      <systemName>LS3591</systemName>
+      <userName>Short Detector 3591</userName>
+      <comment>Trolley Mainline Spencer Side Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3592" inverted="false">
+      <systemName>LS3592</systemName>
+    </sensor>
+    <sensor systemName="LS3593" inverted="false">
+      <systemName>LS3593</systemName>
+    </sensor>
+    <sensor systemName="LS3594" inverted="false">
+      <systemName>LS3594</systemName>
+    </sensor>
+    <sensor systemName="LS3595" inverted="false">
+      <systemName>LS3595</systemName>
+    </sensor>
+    <sensor systemName="LS36" inverted="false">
+      <systemName>LS36</systemName>
+    </sensor>
+    <sensor systemName="LS3680" inverted="false" userName="Short Detector 3680">
+      <systemName>LS3680</systemName>
+      <userName>Short Detector 3680</userName>
+      <comment>Red Line Salisbury to Atlanta or Washington to Spencer Junction Tunnel Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3681" inverted="false" userName="Short Detector 3681">
+      <systemName>LS3681</systemName>
+      <userName>Short Detector 3681</userName>
+      <comment>Gold Line Salisbury, or Atlanta, or Helix Lead Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3682" inverted="false" userName="Short Detector 3682">
+      <systemName>LS3682</systemName>
+      <userName>Short Detector 3682</userName>
+      <comment>Red Line Salisbury or Spencer Junction Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3683" inverted="false" userName="Short Detector 3683">
+      <systemName>LS3683</systemName>
+      <userName>Short Detector 3683</userName>
+      <comment>Blue Line Salisbury to Atlanta or Washington to Spencer Junction Tunnel Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3686" inverted="false">
+      <systemName>LS3686</systemName>
+    </sensor>
+    <sensor systemName="LS3687" inverted="false">
+      <systemName>LS3687</systemName>
+    </sensor>
+    <sensor systemName="LS3688" inverted="false" userName="Short Detector 3688">
+      <systemName>LS3688</systemName>
+      <userName>Short Detector 3688</userName>
+      <comment>Clinchfield Interchange Tracks Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3689" inverted="false" userName="Short Detector 3689">
+      <systemName>LS3689</systemName>
+      <userName>Short Detector 3689</userName>
+      <comment>Statesville Industrial Area Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3690" inverted="false" userName="Short Detector 3690">
+      <systemName>LS3690</systemName>
+      <userName>Short Detector 3690</userName>
+      <comment>Main line Clinch cross to Old Fort Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3691" inverted="false" userName="Short Detector 3691">
+      <systemName>LS3691</systemName>
+      <userName>Short Detector 3691</userName>
+      <comment>Clinchfield Railroad Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3692" inverted="false">
+      <systemName>LS3692</systemName>
+    </sensor>
+    <sensor systemName="LS3693" inverted="false">
+      <systemName>LS3693</systemName>
+    </sensor>
+    <sensor systemName="LS3694" inverted="false">
+      <systemName>LS3694</systemName>
+    </sensor>
+    <sensor systemName="LS3695" inverted="false">
+      <systemName>LS3695</systemName>
+    </sensor>
+    <sensor systemName="LS37" inverted="false">
+      <systemName>LS37</systemName>
+    </sensor>
+    <sensor systemName="LS3701" inverted="false" userName="Short Detector 3701">
+      <systemName>LS3701</systemName>
+      <userName>Short Detector 3701</userName>
+      <comment>Old Fort Loops Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3702" inverted="false" userName="Short Detector 3702">
+      <systemName>LS3702</systemName>
+      <userName>Short Detector 3702</userName>
+      <comment>Coleman Siding Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3780" inverted="false" userName="Short Detector 3780">
+      <systemName>LS3780</systemName>
+      <userName>Short Detector 3780</userName>
+      <comment>Trolley Kelly Loop Frog Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3781" inverted="false" userName="Short Detector 3781">
+      <systemName>LS3781</systemName>
+      <userName>Short Detector 3781</userName>
+      <comment>Trolley Majolica to Spencer Junction Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3782" inverted="false" userName="Short Detector 3782">
+      <systemName>LS3782</systemName>
+      <userName>Short Detector 3782</userName>
+      <comment>Trolley Majolica Interchange Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3784" inverted="false" userName="Short Detector 3784">
+      <systemName>LS3784</systemName>
+      <userName>Short Detector 3784</userName>
+      <comment>Trolley Spencer Junction to Majolica Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3787" inverted="false">
+      <systemName>LS3787</systemName>
+    </sensor>
+    <sensor systemName="LS3788" inverted="false">
+      <systemName>LS3788</systemName>
+    </sensor>
+    <sensor systemName="LS3789" inverted="false" userName="Short Detector 3789">
+      <systemName>LS3789</systemName>
+      <userName>Short Detector 3789</userName>
+      <comment>Majolica Paper Mill Sidings Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3790" inverted="false" userName="Short Detector 3790">
+      <systemName>LS3790</systemName>
+      <userName>Short Detector 3790</userName>
+      <comment>WNC West Bound Spencer to Majolica Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3791" inverted="false" userName="Short Detector 3791">
+      <systemName>LS3791</systemName>
+      <userName>Short Detector 3791</userName>
+      <comment>WNC East Bound Majolica to Spencer Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3792" inverted="false" userName="Short Detector 3792">
+      <systemName>LS3792</systemName>
+      <userName>Short Detector 3792</userName>
+      <comment>Majolica to Statesville Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3793" inverted="false">
+      <systemName>LS3793</systemName>
+    </sensor>
+    <sensor systemName="LS3794" inverted="false" userName="Short Detector 3794">
+      <systemName>LS3794</systemName>
+      <userName>Short Detector 3794</userName>
+      <comment>Tunnel to Spencer Junction Blue line Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3795" inverted="false" userName="Short Detector 3795">
+      <systemName>LS3795</systemName>
+      <userName>Short Detector 3795</userName>
+      <comment>Spencer Junction to Tunnel Red line Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3796" inverted="false" userName="Short Detector 3796">
+      <systemName>LS3796</systemName>
+      <userName>Short Detector 3796</userName>
+      <comment>Trolley Spencer Junction Double to Single Frog Shorted</comment>
+    </sensor>
+    <sensor systemName="LS38" inverted="false">
+      <systemName>LS38</systemName>
+    </sensor>
+    <sensor systemName="LS3801" inverted="false" userName="Short Detector 3801">
+      <systemName>LS3801</systemName>
+      <userName>Short Detector 3801</userName>
+      <comment>Ridgecrest Southside Passing Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3802" inverted="false" userName="Short Detector 3802">
+      <systemName>LS3802</systemName>
+      <userName>Short Detector 3802</userName>
+      <comment>Ridgecrest Main Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3803" inverted="false" userName="Short Detector 3803">
+      <systemName>LS3803</systemName>
+      <userName>Short Detector 3803</userName>
+      <comment>Ridgecrest Stationside Pass Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3804" inverted="false" userName="Short Detector 3804">
+      <systemName>LS3804</systemName>
+      <userName>Short Detector 3804</userName>
+      <comment>Ridgecrest Eastend Industries Shorted</comment>
+    </sensor>
+    <sensor systemName="LS39" inverted="false">
+      <systemName>LS39</systemName>
+    </sensor>
+    <sensor systemName="LS3901" inverted="false" userName="Short Detector 3901">
+      <systemName>LS3901</systemName>
+      <userName>Short Detector 3901</userName>
+      <comment>Swannanoa Westbound Main or Industries Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3902" inverted="false" userName="Short Detector 3902">
+      <systemName>LS3902</systemName>
+      <userName>Short Detector 3902</userName>
+      <comment>Swannanoa Eastbound Main or Industries Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3903" inverted="false" userName="Short Detector 3903">
+      <systemName>LS3903</systemName>
+      <userName>Short Detector 3903</userName>
+      <comment>Asheville Westbound Main or Outer Loop Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3904" inverted="false" userName="Short Detector 3904">
+      <systemName>LS3904</systemName>
+      <userName>Short Detector 3904</userName>
+      <comment>Asheville Eastbound Main or Eastend Industrial Area Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3905" inverted="false" userName="Short Detector 3905">
+      <systemName>LS3905</systemName>
+      <userName>Short Detector 3905</userName>
+      <comment>Asheville Eastend Yard or Drill Track Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3906" inverted="false" userName="Short Detector 3906">
+      <systemName>LS3906</systemName>
+      <userName>Short Detector 3906</userName>
+      <comment>Asheville Yard Track Three or Four Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3907" inverted="false" userName="Short Detector 3907">
+      <systemName>LS3907</systemName>
+      <userName>Short Detector 3907</userName>
+      <comment>Asheville Yard Track One or Two Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3908" inverted="false" userName="Short Detector 3908">
+      <systemName>LS3908</systemName>
+      <userName>Short Detector 3908</userName>
+      <comment>Asheville Westend Yard or Station Inner Loop Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3909" inverted="false" userName="Short Detector 3909">
+      <systemName>LS3909</systemName>
+      <userName>Short Detector 3909</userName>
+      <comment>Asheville  Eastbound Main or West end Industrial Area Shorted</comment>
+    </sensor>
+    <sensor systemName="LS3910" inverted="false" userName="Short Detector 3910">
+      <systemName>LS3910</systemName>
+      <userName>Short Detector 3910</userName>
+      <comment>Asheville Southside Industrial Area Shorted</comment>
+    </sensor>
+    <sensor systemName="LS4" inverted="false">
+      <systemName>LS4</systemName>
+    </sensor>
+    <sensor systemName="LS40" inverted="false">
+      <systemName>LS40</systemName>
+    </sensor>
+    <sensor systemName="LS4061" inverted="false">
+      <systemName>LS4061</systemName>
+    </sensor>
+    <sensor systemName="LS4062" inverted="false">
+      <systemName>LS4062</systemName>
+    </sensor>
+    <sensor systemName="LS4063" inverted="false">
+      <systemName>LS4063</systemName>
+    </sensor>
+    <sensor systemName="LS4064" inverted="false">
+      <systemName>LS4064</systemName>
+    </sensor>
+    <sensor systemName="LS4065" inverted="false">
+      <systemName>LS4065</systemName>
+    </sensor>
+    <sensor systemName="LS4066" inverted="false">
+      <systemName>LS4066</systemName>
+    </sensor>
+    <sensor systemName="LS4067" inverted="false">
+      <systemName>LS4067</systemName>
+    </sensor>
+    <sensor systemName="LS4068" inverted="false">
+      <systemName>LS4068</systemName>
+    </sensor>
+    <sensor systemName="LS4069" inverted="false">
+      <systemName>LS4069</systemName>
+    </sensor>
+    <sensor systemName="LS4070" inverted="false">
+      <systemName>LS4070</systemName>
+    </sensor>
+    <sensor systemName="LS4071" inverted="false">
+      <systemName>LS4071</systemName>
+    </sensor>
+    <sensor systemName="LS4072" inverted="false">
+      <systemName>LS4072</systemName>
+    </sensor>
+    <sensor systemName="LS4073" inverted="false">
+      <systemName>LS4073</systemName>
+    </sensor>
+    <sensor systemName="LS4074" inverted="false">
+      <systemName>LS4074</systemName>
+    </sensor>
+    <sensor systemName="LS4075" inverted="false">
+      <systemName>LS4075</systemName>
+    </sensor>
+    <sensor systemName="LS4076" inverted="false">
+      <systemName>LS4076</systemName>
+    </sensor>
+    <sensor systemName="LS41" inverted="false">
+      <systemName>LS41</systemName>
+    </sensor>
+    <sensor systemName="LS42" inverted="false">
+      <systemName>LS42</systemName>
+    </sensor>
+    <sensor systemName="LS43" inverted="false">
+      <systemName>LS43</systemName>
+    </sensor>
+    <sensor systemName="LS44" inverted="false">
+      <systemName>LS44</systemName>
+    </sensor>
+    <sensor systemName="LS45" inverted="false">
+      <systemName>LS45</systemName>
+    </sensor>
+    <sensor systemName="LS46" inverted="false">
+      <systemName>LS46</systemName>
+    </sensor>
+    <sensor systemName="LS47" inverted="false">
+      <systemName>LS47</systemName>
+    </sensor>
+    <sensor systemName="LS48" inverted="false">
+      <systemName>LS48</systemName>
+    </sensor>
+    <sensor systemName="LS49" inverted="false">
+      <systemName>LS49</systemName>
+    </sensor>
+    <sensor systemName="LS5" inverted="false">
+      <systemName>LS5</systemName>
+    </sensor>
+    <sensor systemName="LS50" inverted="false">
+      <systemName>LS50</systemName>
+    </sensor>
+    <sensor systemName="LS51" inverted="false">
+      <systemName>LS51</systemName>
+    </sensor>
+    <sensor systemName="LS52" inverted="false">
+      <systemName>LS52</systemName>
+    </sensor>
+    <sensor systemName="LS53" inverted="false">
+      <systemName>LS53</systemName>
+    </sensor>
+    <sensor systemName="LS54" inverted="false">
+      <systemName>LS54</systemName>
+    </sensor>
+    <sensor systemName="LS55" inverted="false">
+      <systemName>LS55</systemName>
+    </sensor>
+    <sensor systemName="LS56" inverted="false">
+      <systemName>LS56</systemName>
+    </sensor>
+    <sensor systemName="LS57" inverted="false">
+      <systemName>LS57</systemName>
+    </sensor>
+    <sensor systemName="LS58" inverted="false">
+      <systemName>LS58</systemName>
+    </sensor>
+    <sensor systemName="LS59" inverted="false">
+      <systemName>LS59</systemName>
+    </sensor>
+    <sensor systemName="LS6" inverted="false">
+      <systemName>LS6</systemName>
+    </sensor>
+    <sensor systemName="LS60" inverted="false">
+      <systemName>LS60</systemName>
+    </sensor>
+    <sensor systemName="LS61" inverted="false">
+      <systemName>LS61</systemName>
+    </sensor>
+    <sensor systemName="LS62" inverted="false">
+      <systemName>LS62</systemName>
+    </sensor>
+    <sensor systemName="LS63" inverted="false">
+      <systemName>LS63</systemName>
+    </sensor>
+    <sensor systemName="LS64" inverted="false">
+      <systemName>LS64</systemName>
+    </sensor>
+    <sensor systemName="LS65" inverted="false">
+      <systemName>LS65</systemName>
+    </sensor>
+    <sensor systemName="LS66" inverted="false">
+      <systemName>LS66</systemName>
+    </sensor>
+    <sensor systemName="LS67" inverted="false">
+      <systemName>LS67</systemName>
+    </sensor>
+    <sensor systemName="LS68" inverted="false">
+      <systemName>LS68</systemName>
+    </sensor>
+    <sensor systemName="LS69" inverted="false">
+      <systemName>LS69</systemName>
+    </sensor>
+    <sensor systemName="LS7" inverted="false">
+      <systemName>LS7</systemName>
+    </sensor>
+    <sensor systemName="LS70" inverted="false">
+      <systemName>LS70</systemName>
+    </sensor>
+    <sensor systemName="LS71" inverted="false">
+      <systemName>LS71</systemName>
+    </sensor>
+    <sensor systemName="LS72" inverted="false">
+      <systemName>LS72</systemName>
+    </sensor>
+    <sensor systemName="LS73" inverted="false">
+      <systemName>LS73</systemName>
+    </sensor>
+    <sensor systemName="LS74" inverted="false">
+      <systemName>LS74</systemName>
+    </sensor>
+    <sensor systemName="LS75" inverted="false">
+      <systemName>LS75</systemName>
+    </sensor>
+    <sensor systemName="LS76" inverted="false">
+      <systemName>LS76</systemName>
+    </sensor>
+    <sensor systemName="LS77" inverted="false">
+      <systemName>LS77</systemName>
+    </sensor>
+    <sensor systemName="LS78" inverted="false">
+      <systemName>LS78</systemName>
+    </sensor>
+    <sensor systemName="LS79" inverted="false">
+      <systemName>LS79</systemName>
+    </sensor>
+    <sensor systemName="LS8" inverted="false">
+      <systemName>LS8</systemName>
+    </sensor>
+    <sensor systemName="LS80" inverted="false">
+      <systemName>LS80</systemName>
+    </sensor>
+    <sensor systemName="LS81" inverted="false">
+      <systemName>LS81</systemName>
+    </sensor>
+    <sensor systemName="LS82" inverted="false">
+      <systemName>LS82</systemName>
+    </sensor>
+    <sensor systemName="LS83" inverted="false">
+      <systemName>LS83</systemName>
+    </sensor>
+    <sensor systemName="LS84" inverted="false">
+      <systemName>LS84</systemName>
+    </sensor>
+    <sensor systemName="LS85" inverted="false">
+      <systemName>LS85</systemName>
+    </sensor>
+    <sensor systemName="LS86" inverted="false">
+      <systemName>LS86</systemName>
+    </sensor>
+    <sensor systemName="LS87" inverted="false">
+      <systemName>LS87</systemName>
+    </sensor>
+    <sensor systemName="LS88" inverted="false">
+      <systemName>LS88</systemName>
+    </sensor>
+    <sensor systemName="LS89" inverted="false">
+      <systemName>LS89</systemName>
+    </sensor>
+    <sensor systemName="LS9" inverted="false">
+      <systemName>LS9</systemName>
+    </sensor>
+    <sensor systemName="LS90" inverted="false">
+      <systemName>LS90</systemName>
+    </sensor>
+    <sensor systemName="LS91" inverted="false">
+      <systemName>LS91</systemName>
+    </sensor>
+    <sensor systemName="LS92" inverted="false">
+      <systemName>LS92</systemName>
+    </sensor>
+    <sensor systemName="LS93" inverted="false">
+      <systemName>LS93</systemName>
+    </sensor>
+    <sensor systemName="LS94" inverted="false">
+      <systemName>LS94</systemName>
+    </sensor>
+    <sensor systemName="LS95" inverted="false">
+      <systemName>LS95</systemName>
+    </sensor>
+    <sensor systemName="LS96" inverted="false">
+      <systemName>LS96</systemName>
+    </sensor>
+  </sensors>
+  <sensors class="jmri.jmrix.internal.configurexml.InternalSensorManagerXml">
+    <defaultInitialState>unknown</defaultInitialState>
+    <sensor systemName="ISCLOCKRUNNING" inverted="false">
+      <systemName>ISCLOCKRUNNING</systemName>
+    </sensor>
+  </sensors>
+  <turnouts class="jmri.jmrix.loconet.configurexml.LnTurnoutManagerXml">
+    <operations automate="false">
+      <operation name="NoFeedback" class="jmri.configurexml.turnoutoperations.NoFeedbackTurnoutOperationXml" interval="300" maxtries="2" />
+      <operation name="Raw" class="jmri.configurexml.turnoutoperations.RawTurnoutOperationXml" interval="300" maxtries="1" />
+      <operation name="Sensor" class="jmri.configurexml.turnoutoperations.SensorTurnoutOperationXml" interval="300" maxtries="3" />
+    </operations>
+    <defaultclosedspeed>Normal</defaultclosedspeed>
+    <defaultthrownspeed>Restricted</defaultthrownspeed>
+    <turnout systemName="LT1" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT1</systemName>
+    </turnout>
+    <turnout systemName="LT103" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT103</systemName>
+    </turnout>
+    <turnout systemName="LT1535" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT1535</systemName>
+    </turnout>
+    <turnout systemName="LT1536" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT1536</systemName>
+    </turnout>
+    <turnout systemName="LT2" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT2</systemName>
+    </turnout>
+    <turnout systemName="LT27" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT27</systemName>
+    </turnout>
+    <turnout systemName="LT28" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT28</systemName>
+    </turnout>
+    <turnout systemName="LT29" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT29</systemName>
+    </turnout>
+    <turnout systemName="LT3" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT3</systemName>
+    </turnout>
+    <turnout systemName="LT30" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT30</systemName>
+    </turnout>
+    <turnout systemName="LT31" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT31</systemName>
+    </turnout>
+    <turnout systemName="LT4" feedback="MONITORING" inverted="false" automate="Off">
+      <systemName>LT4</systemName>
+    </turnout>
+  </turnouts>
+  <memories class="jmri.managers.configurexml.DefaultMemoryManagerXml">
+    <memory systemName="IMCURRENTTIME" value="11:27 AM">
+      <systemName>IMCURRENTTIME</systemName>
+    </memory>
+    <memory systemName="IMRATEFACTOR" value="1.0">
+      <systemName>IMRATEFACTOR</systemName>
+    </memory>
+  </memories>
+  <signalmasts class="jmri.managers.configurexml.DefaultSignalMastManagerXml" />
+  <signalgroups class="jmri.managers.configurexml.DefaultSignalGroupManagerXml" />
+  <blocks class="jmri.configurexml.BlockManagerXml">
+    <defaultspeed>Normal</defaultspeed>
+    <block systemName="IB1">
+      <systemName>IB1</systemName>
+      <userName>TL1</userName>
+    </block>
+    <block systemName="IB100">
+      <systemName>IB100</systemName>
+      <userName>Thomas Loop</userName>
+    </block>
+    <block systemName="IB101">
+      <systemName>IB101</systemName>
+      <userName>Aisle Main</userName>
+    </block>
+    <block systemName="IB102">
+      <systemName>IB102</systemName>
+      <userName>Single Southend</userName>
+    </block>
+    <block systemName="IB103">
+      <systemName>IB103</systemName>
+      <userName>Spencer Loop Returning</userName>
+    </block>
+    <block systemName="IB104">
+      <systemName>IB104</systemName>
+      <userName>Spencer Loop Entering</userName>
+    </block>
+    <block systemName="IB105">
+      <systemName>IB105</systemName>
+      <userName>Single Northend</userName>
+    </block>
+    <block systemName="IB106">
+      <systemName>IB106</systemName>
+      <userName>Town Main</userName>
+    </block>
+    <block systemName="IB2">
+      <systemName>IB2</systemName>
+      <userName>TL2</userName>
+    </block>
+    <block systemName="IB3">
+      <systemName>IB3</systemName>
+      <userName>TL3</userName>
+    </block>
+    <block systemName="IB4">
+      <systemName>IB4</systemName>
+      <userName>TL4</userName>
+    </block>
+    <block systemName="IB5">
+      <systemName>IB5</systemName>
+      <userName>TL5</userName>
+    </block>
+    <block systemName="IB6">
+      <systemName>IB6</systemName>
+      <userName>TL6</userName>
+    </block>
+    <block systemName="IB7">
+      <systemName>IB7</systemName>
+      <userName>TL7</userName>
+    </block>
+    <block systemName="IB8">
+      <systemName>IB8</systemName>
+      <userName>AM1</userName>
+    </block>
+    <block systemName="IB9">
+      <systemName>IB9</systemName>
+      <userName>AM2</userName>
+    </block>
+    <block systemName="IB1" length="0.0" curve="0" userName="TL1">
+      <systemName>IB1</systemName>
+      <userName>TL1</userName>
+      <permissive>no</permissive>
+      <path todir="144" fromdir="96" block="IB2" />
+    </block>
+    <block systemName="IB100" length="0.0" curve="0" userName="Thomas Loop">
+      <systemName>IB100</systemName>
+      <userName>Thomas Loop</userName>
+      <permissive>no</permissive>
+      <occupancysensor>Short Detector 100</occupancysensor>
+    </block>
+    <block systemName="IB101" length="0.0" curve="0" userName="Aisle Main">
+      <systemName>IB101</systemName>
+      <userName>Aisle Main</userName>
+      <permissive>no</permissive>
+      <occupancysensor>Short Detector 101</occupancysensor>
+    </block>
+    <block systemName="IB102" length="0.0" curve="0" userName="Single Southend">
+      <systemName>IB102</systemName>
+      <userName>Single Southend</userName>
+      <permissive>no</permissive>
+      <occupancysensor>Short Detector 102</occupancysensor>
+    </block>
+    <block systemName="IB103" length="0.0" curve="0" userName="Spencer Loop Returning">
+      <systemName>IB103</systemName>
+      <userName>Spencer Loop Returning</userName>
+      <permissive>no</permissive>
+      <occupancysensor>Short Detector 103</occupancysensor>
+    </block>
+    <block systemName="IB104" length="0.0" curve="0" userName="Spencer Loop Entering">
+      <systemName>IB104</systemName>
+      <userName>Spencer Loop Entering</userName>
+      <permissive>no</permissive>
+      <occupancysensor>Short Detector 104</occupancysensor>
+    </block>
+    <block systemName="IB105" length="0.0" curve="0" userName="Single Northend">
+      <systemName>IB105</systemName>
+      <userName>Single Northend</userName>
+      <permissive>no</permissive>
+      <occupancysensor>Short Detector 105</occupancysensor>
+    </block>
+    <block systemName="IB106" length="0.0" curve="0" userName="Town Main">
+      <systemName>IB106</systemName>
+      <userName>Town Main</userName>
+      <permissive>no</permissive>
+    </block>
+    <block systemName="IB2" length="0.0" curve="0" userName="TL2">
+      <systemName>IB2</systemName>
+      <userName>TL2</userName>
+      <permissive>no</permissive>
+      <path todir="96" fromdir="144" block="IB1" />
+      <path todir="144" fromdir="96" block="IB3" />
+    </block>
+    <block systemName="IB3" length="0.0" curve="0" userName="TL3">
+      <systemName>IB3</systemName>
+      <userName>TL3</userName>
+      <permissive>no</permissive>
+      <path todir="96" fromdir="144" block="IB2" />
+      <path todir="128" fromdir="64" block="IB4" />
+    </block>
+    <block systemName="IB4" length="0.0" curve="0" userName="TL4">
+      <systemName>IB4</systemName>
+      <userName>TL4</userName>
+      <permissive>no</permissive>
+      <path todir="64" fromdir="128" block="IB3" />
+      <path todir="160" fromdir="80" block="IB5" />
+    </block>
+    <block systemName="IB5" length="0.0" curve="0" userName="TL5">
+      <systemName>IB5</systemName>
+      <userName>TL5</userName>
+      <permissive>no</permissive>
+      <path todir="80" fromdir="160" block="IB4" />
+      <path todir="32" fromdir="16" block="IB6" />
+    </block>
+    <block systemName="IB6" length="0.0" curve="0" userName="TL6">
+      <systemName>IB6</systemName>
+      <userName>TL6</userName>
+      <permissive>no</permissive>
+      <path todir="16" fromdir="32" block="IB5" />
+      <path todir="96" fromdir="144" block="IB7" />
+    </block>
+    <block systemName="IB7" length="0.0" curve="0" userName="TL7">
+      <systemName>IB7</systemName>
+      <userName>TL7</userName>
+      <permissive>no</permissive>
+      <path todir="144" fromdir="96" block="IB6" />
+      <path todir="96" fromdir="144" block="IB8" />
+    </block>
+    <block systemName="IB8" length="0.0" curve="0" userName="AM1">
+      <systemName>IB8</systemName>
+      <userName>AM1</userName>
+      <permissive>no</permissive>
+      <path todir="144" fromdir="96" block="IB7" />
+      <path todir="64" fromdir="128" block="IB9" />
+    </block>
+    <block systemName="IB9" length="0.0" curve="0" userName="AM2">
+      <systemName>IB9</systemName>
+      <userName>AM2</userName>
+      <permissive>no</permissive>
+      <path todir="128" fromdir="64" block="IB8" />
+    </block>
+  </blocks>
+  <oblocks class="jmri.jmrit.logix.configurexml.OBlockManagerXml" />
+  <layoutblocks class="jmri.jmrit.display.configurexml.LayoutBlockManagerXml">
+    <layoutblock systemName="ILB1" userName="TL1" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB1</systemName>
+      <userName>TL1</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB2" userName="TL2" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB2</systemName>
+      <userName>TL2</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB3" userName="TL3" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB3</systemName>
+      <userName>TL3</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB4" userName="TL4" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB4</systemName>
+      <userName>TL4</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB5" userName="TL5" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB5</systemName>
+      <userName>TL5</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB6" userName="TL6" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB6</systemName>
+      <userName>TL6</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB7" userName="TL7" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB7</systemName>
+      <userName>TL7</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB8" userName="AM1" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB8</systemName>
+      <userName>AM1</userName>
+    </layoutblock>
+    <layoutblock systemName="ILB9" userName="AM2" occupiedsense="2" trackcolor="black" occupiedcolor="red" extracolor="white">
+      <systemName>ILB9</systemName>
+      <userName>AM2</userName>
+    </layoutblock>
+  </layoutblocks>
+  <sections class="jmri.configurexml.SectionManagerXml">
+    <section systemName="IY100" userName="Thomas Loop" creationtype="userdefined">
+      <userName>Thomas Loop</userName>
+      <blockentry sName="IB1" order="0" />
+      <blockentry sName="IB2" order="1" />
+      <blockentry sName="IB3" order="2" />
+      <blockentry sName="IB4" order="3" />
+      <blockentry sName="IB5" order="4" />
+      <blockentry sName="IB6" order="5" />
+      <blockentry sName="IB7" order="6" />
+      <entrypoint fromblock="IB8" toblock="IB7" direction="8" fixed="no" fromblockdirection="North, West" />
+    </section>
+  </sections>
+  <warrants class="jmri.jmrit.logix.configurexml.WarrantManagerXml" />
+  <signalmastlogics class="jmri.managers.configurexml.DefaultSignalMastLogicManagerXml">
+    <logicDelay>500</logicDelay>
+  </signalmastlogics>
+  <timebase class="jmri.jmrit.simpleclock.configurexml.SimpleTimebaseXml" time="Fri Jun 17 10:33:16 EDT 2016" rate="1.0" run="yes" master="yes" sync="no" correct="no" display="no" startstopped="no" startsettime="no" startclockoption="0" />
+  <entryexitpairs class="jmri.jmrit.signalling.configurexml.EntryExitPairsXml" />
+  <entryexitpairs class="jmri.jmrit.signalling.configurexml.EntryExitPairsXml" />
+  <LayoutEditor class="jmri.jmrit.display.layoutEditor.configurexml.LayoutEditorXml" name="My Layout" x="0" y="0" height="780" width="1580" windowheight="845" windowwidth="1599" panelheight="780" panelwidth="1580" sliders="no" scrollable="none" editable="yes" positionable="yes" controlling="yes" animating="yes" showhelpbar="yes" drawgrid="no" snaponadd="no" snaponmove="no" antialiasing="no" turnoutcircles="no" tooltipsnotedit="no" tooltipsinedit="yes" mainlinetrackwidth="4" xscale="1.0" yscale="1.0" sidetrackwidth="2" defaulttrackcolor="black" defaultoccupiedtrackcolor="red" defaultalternativetrackcolor="white" defaulttextcolor="black" turnoutcirclecolor="black" turnoutcirclesize="2" turnoutdrawunselectedleg="yes" turnoutbx="20.0" turnoutcx="20.0" turnoutwid="10.0" xoverlong="30.0" xoverhwid="10.0" xovershort="10.0" autoblkgenerate="no" gridSize="10" openDispatcher="no" useDirectTurnoutControl="no">
+    <layoutturnout ident="TO2" turnoutname="LT27" secondturnoutname="LT27" type="1" connectaname="T9" connectcname="T1" continuing="2" disabled="no" disableWhenOccupied="no" xcen="447.0" ycen="291.0" xa="467.0" ya="291.0" xb="427.0" yb="291.0" xc="427.0" yc="281.0" xd="467.0" yd="291.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO3" blockname="AM1" type="1" connectaname="T10" connectcname="T20" continuing="4" disabled="no" disableWhenOccupied="no" xcen="375.0" ycen="311.0" xa="395.0" ya="311.0" xb="355.0" yb="311.0" xc="355.0" yc="301.0" xd="395.0" yd="311.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO5" turnoutname="LT3" secondturnoutname="LT3" type="2" connectaname="T8" connectbname="T12" connectcname="T11" continuing="2" disabled="no" disableWhenOccupied="no" xcen="889.0" ycen="301.0" xa="869.0" ya="301.0" xb="909.0" yb="301.0" xc="909.0" yc="291.0" xd="869.0" yd="301.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO7" turnoutname="LT2" secondturnoutname="LT2" type="3" connectaname="T8" connectbname="T28" connectcname="T30" continuing="2" disabled="no" disableWhenOccupied="no" xcen="794.0" ycen="301.0" xa="814.0" ya="301.0" xb="774.0" yb="296.0" xc="774.0" yc="306.0" xd="814.0" yd="306.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO10" type="2" connectaname="T11" connectbname="T13" continuing="2" disabled="no" disableWhenOccupied="no" xcen="936.708740234375" ycen="277.1456298828125" xa="919.0" ya="286.0" xb="954.41748046875" yb="268.291259765625" xc="949.9902954101562" yc="259.4368591308594" xd="919.0" yd="286.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO11" turnoutname="LT4" secondturnoutname="LT4" type="2" connectaname="T12" connectcname="T19" continuing="2" disabled="no" disableWhenOccupied="no" xcen="1004.0" ycen="301.0" xa="984.0" ya="301.0" xb="1024.0" yb="301.0" xc="1024.0" yc="291.0" xd="984.0" yd="301.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO1" type="6" connectaname="T24" connectbname="T26" connectcname="T29" connectdname="T25" continuing="2" disabled="no" disableWhenOccupied="no" xcen="632.0" ycen="301.0" xa="622.0" ya="291.0" xb="662.0" yb="291.0" xc="642.0" yc="311.0" xd="602.0" yd="311.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO4" type="5" connectaname="T9" connectbname="T21" connectcname="T25" connectdname="T10" continuing="2" disabled="no" disableWhenOccupied="no" xcen="509.0" ycen="301.0" xa="479.0" ya="291.0" xb="518.99999" yb="291.0" xc="539.0" yc="311.0" xd="499.00001" yd="311.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO8" type="1" connectaname="T24" connectbname="T21" connectcname="T22" continuing="2" disabled="no" disableWhenOccupied="no" xcen="540.0" ycen="291.0" xa="560.0" ya="291.0" xb="520.0" yb="291.0" xc="520.0" yc="281.0" xd="560.0" yd="291.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO9" type="1" connectaname="T27" connectbname="T26" continuing="2" disabled="no" disableWhenOccupied="no" xcen="682.0" ycen="291.0" xa="702.0" ya="291.0" xb="662.0" yb="291.0" xc="662.0" yc="281.0" xd="702.0" yd="291.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO6" type="1" connectaname="T28" connectbname="T27" connectcname="T31" continuing="2" disabled="no" disableWhenOccupied="no" xcen="722.0" ycen="291.0" xa="742.0" ya="291.0" xb="702.0" yb="291.0" xc="702.0" yc="281.0" xd="742.0" yd="291.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <layoutturnout ident="TO13" type="1" connectcname="T31" continuing="2" disabled="no" disableWhenOccupied="no" xcen="653.0" ycen="257.0" xa="633.0" ya="257.0" xb="673.0" yb="257.0" xc="673.0" yc="267.0" xd="633.0" yd="257.0" ver="1" class="jmri.jmrit.display.configurexml.LayoutTurnoutXml" />
+    <tracksegment ident="T1" blockname="TL1" connect1name="A2" type1="1" connect2name="TO2" type2="4" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T2" blockname="TL2" connect1name="A3" type1="1" connect2name="A2" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T3" blockname="TL3" connect1name="A4" type1="1" connect2name="A3" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T4" blockname="TL4" connect1name="A5" type1="1" connect2name="A4" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T5" blockname="TL5" connect1name="A6" type1="1" connect2name="A5" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T7" blockname="TL6" connect1name="A6" type1="1" connect2name="A7" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T8" connect1name="TO7" type1="2" connect2name="TO5" type2="2" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T11" connect1name="TO10" type1="2" connect2name="TO5" type2="4" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T12" connect1name="TO5" type1="3" connect2name="TO11" type2="2" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T13" connect1name="A8" type1="1" connect2name="TO10" type2="3" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T14" connect1name="A10" type1="1" connect2name="A8" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T15" connect1name="A13" type1="1" connect2name="A10" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T16" connect1name="A12" type1="1" connect2name="A13" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T17" connect1name="A11" type1="1" connect2name="A12" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T18" connect1name="A9" type1="1" connect2name="A11" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T19" connect1name="TO11" type1="4" connect2name="A9" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T9" connect1name="TO4" type1="2" connect2name="TO2" type2="2" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T10" connect1name="TO3" type1="2" connect2name="TO4" type2="5" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T20" connect1name="A7" type1="1" connect2name="TO3" type2="4" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T21" connect1name="TO8" type1="3" connect2name="TO4" type2="3" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T22" connect1name="TO8" type1="4" connect2name="A14" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T23" connect1name="A1" type1="1" connect2name="A14" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T24" connect1name="TO8" type1="2" connect2name="TO1" type2="2" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T25" connect1name="TO4" type1="4" connect2name="TO1" type2="5" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T26" connect1name="TO9" type1="3" connect2name="TO1" type2="3" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T27" connect1name="TO6" type1="3" connect2name="TO9" type2="2" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T28" connect1name="TO7" type1="3" connect2name="TO6" type2="2" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T29" connect1name="TO1" type1="4" connect2name="A15" type2="1" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T30" connect1name="A15" type1="1" connect2name="TO7" type2="4" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <tracksegment ident="T31" connect1name="TO6" type1="4" connect2name="TO13" type2="4" dashed="no" mainline="no" hidden="no" arc="no" class="jmri.jmrit.display.configurexml.TrackSegmentXml" />
+    <positionablepoint ident="A2" type="1" x="382.0" y="250.0" connect1name="T1" connect2name="T2" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A3" type="1" x="382.0" y="194.0" connect1name="T2" connect2name="T3" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A4" type="1" x="349.0" y="170.0" connect1name="T3" connect2name="T4" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A5" type="1" x="303.0" y="170.0" connect1name="T4" connect2name="T5" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A6" type="1" x="277.0" y="200.0" connect1name="T5" connect2name="T7" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A7" type="1" x="277.0" y="248.0" connect1name="T20" connect2name="T7" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A8" type="1" x="999.0" y="244.0" connect1name="T13" connect2name="T14" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A9" type="1" x="1091.0" y="254.0" connect1name="T18" connect2name="T19" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A10" type="1" x="1000.0" y="191.0" connect1name="T14" connect2name="T15" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A11" type="1" x="1091.0" y="188.0" connect1name="T17" connect2name="T18" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A12" type="1" x="1061.0" y="158.0" connect1name="T16" connect2name="T17" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A13" type="1" x="1020.0" y="158.0" connect1name="T15" connect2name="T16" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A1" type="1" x="463.0" y="271.0" connect1name="T23" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A14" type="1" x="501.0" y="271.0" connect1name="T22" connect2name="T23" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+    <positionablepoint ident="A15" type="1" x="741.0" y="311.0" connect1name="T29" connect2name="T30" class="jmri.jmrit.display.configurexml.PositionablePointXml" />
+  </LayoutEditor>
+  <filehistory>
+    <operation>
+      <type>app</type>
+      <date>Fri Aug 05 14:29:27 EDT 2016</date>
+      <filename>JMRI program</filename>
+    </operation>
+    <operation>
+      <type>Load OK</type>
+      <date>Fri Aug 05 14:29:28 EDT 2016</date>
+      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorMessageFile.xml</filename>
+      <filehistory>
+        <operation>
+          <type>app</type>
+          <date>Tue Jul 26 19:09:01 EDT 2016</date>
+          <filename>JMRI program</filename>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Tue Jul 26 19:09:02 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Sun Jul 10 14:17:47 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Sun Jul 10 14:17:48 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Sun Jul 10 14:20:49 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Store</type>
+          <date>Tue Jul 26 19:10:29 EDT 2016</date>
+          <filename />
+        </operation>
+      </filehistory>
+    </operation>
+    <operation>
+      <type>Load OK</type>
+      <date>Fri Aug 05 14:31:11 EDT 2016</date>
+      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+      <filehistory>
+        <operation>
+          <type>app</type>
+          <date>Thu Jul 21 12:58:57 EDT 2016</date>
+          <filename>JMRI program</filename>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Thu Jul 21 12:59:00 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Sun Jul 10 14:17:47 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Sun Jul 10 14:17:48 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Sun Jul 10 14:20:49 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Store</type>
+          <date>Thu Jul 21 20:26:36 EDT 2016</date>
+          <filename />
+        </operation>
+      </filehistory>
+    </operation>
+    <operation>
+      <type>Load OK</type>
+      <date>Sat Aug 06 10:04:47 EDT 2016</date>
+      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+      <filehistory>
+        <operation>
+          <type>app</type>
+          <date>Thu Jul 21 12:58:57 EDT 2016</date>
+          <filename>JMRI program</filename>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Thu Jul 21 12:59:00 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Sun Jul 10 14:17:47 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Sun Jul 10 14:17:48 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Sun Jul 10 14:20:49 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Store</type>
+          <date>Thu Jul 21 20:26:36 EDT 2016</date>
+          <filename />
+        </operation>
+      </filehistory>
+    </operation>
+    <operation>
+      <type>Load OK</type>
+      <date>Sat Aug 06 10:09:33 EDT 2016</date>
+      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout2.xml</filename>
+      <filehistory>
+        <operation>
+          <type>app</type>
+          <date>Fri Aug 05 14:29:27 EDT 2016</date>
+          <filename>JMRI program</filename>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Fri Aug 05 14:29:28 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorMessageFile.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Tue Jul 26 19:09:01 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Tue Jul 26 19:09:02 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Tue Jul 26 19:10:29 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Fri Aug 05 14:31:11 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Thu Jul 21 12:58:57 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Thu Jul 21 12:59:00 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Thu Jul 21 20:26:36 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Sat Aug 06 10:04:47 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Thu Jul 21 12:58:57 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Thu Jul 21 12:59:00 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Thu Jul 21 20:26:36 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Store</type>
+          <date>Sat Aug 06 10:08:10 EDT 2016</date>
+          <filename />
+        </operation>
+      </filehistory>
+    </operation>
+    <operation>
+      <type>Load OK</type>
+      <date>Sun Aug 07 09:28:30 EDT 2016</date>
+      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout2.xml</filename>
+      <filehistory>
+        <operation>
+          <type>app</type>
+          <date>Fri Aug 05 14:29:27 EDT 2016</date>
+          <filename>JMRI program</filename>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Fri Aug 05 14:29:28 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorMessageFile.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Tue Jul 26 19:09:01 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Tue Jul 26 19:09:02 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Tue Jul 26 19:10:29 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Fri Aug 05 14:31:11 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Thu Jul 21 12:58:57 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Thu Jul 21 12:59:00 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Thu Jul 21 20:26:36 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Sat Aug 06 10:04:47 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Thu Jul 21 12:58:57 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Thu Jul 21 12:59:00 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Thu Jul 21 20:26:36 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Store</type>
+          <date>Sat Aug 06 10:08:10 EDT 2016</date>
+          <filename />
+        </operation>
+      </filehistory>
+    </operation>
+    <operation>
+      <type>Load OK</type>
+      <date>Mon Aug 08 11:24:58 EDT 2016</date>
+      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout2.xml</filename>
+      <filehistory>
+        <operation>
+          <type>app</type>
+          <date>Fri Aug 05 14:29:27 EDT 2016</date>
+          <filename>JMRI program</filename>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Fri Aug 05 14:29:28 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorMessageFile.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Tue Jul 26 19:09:01 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Tue Jul 26 19:09:02 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Tue Jul 26 19:10:29 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Fri Aug 05 14:31:11 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Thu Jul 21 12:58:57 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Thu Jul 21 12:59:00 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Thu Jul 21 20:26:36 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Sat Aug 06 10:04:47 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Thu Jul 21 12:58:57 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Thu Jul 21 12:59:00 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Fri Jun 17 10:33:16 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Fri Jun 17 10:45:11 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Thu Jul 21 20:26:36 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Sat Aug 06 10:09:33 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout2.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Fri Aug 05 14:29:27 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Fri Aug 05 14:29:28 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorMessageFile.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Tue Jul 26 19:09:01 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Tue Jul 26 19:09:02 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Load OK</type>
+                          <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Tue Jul 26 19:10:29 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Fri Aug 05 14:31:11 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 21 12:58:57 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 21 12:59:00 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Load OK</type>
+                          <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 21 20:26:36 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Sat Aug 06 10:04:47 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 21 12:58:57 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 21 12:59:00 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Load OK</type>
+                          <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 21 20:26:36 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Sat Aug 06 10:08:10 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Load OK</type>
+          <date>Sun Aug 07 09:28:30 EDT 2016</date>
+          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout2.xml</filename>
+          <filehistory>
+            <operation>
+              <type>app</type>
+              <date>Fri Aug 05 14:29:27 EDT 2016</date>
+              <filename>JMRI program</filename>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Fri Aug 05 14:29:28 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorMessageFile.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Tue Jul 26 19:09:01 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Tue Jul 26 19:09:02 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Load OK</type>
+                          <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Tue Jul 26 19:10:29 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Fri Aug 05 14:31:11 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 21 12:58:57 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 21 12:59:00 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Load OK</type>
+                          <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 21 20:26:36 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Load OK</type>
+              <date>Sat Aug 06 10:04:47 EDT 2016</date>
+              <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/Trolley-EL-Layout.xml</filename>
+              <filehistory>
+                <operation>
+                  <type>app</type>
+                  <date>Thu Jul 21 12:58:57 EDT 2016</date>
+                  <filename>JMRI program</filename>
+                </operation>
+                <operation>
+                  <type>Load OK</type>
+                  <date>Thu Jul 21 12:59:00 EDT 2016</date>
+                  <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                  <filehistory>
+                    <operation>
+                      <type>app</type>
+                      <date>Sun Jul 10 14:17:47 EDT 2016</date>
+                      <filename>JMRI program</filename>
+                    </operation>
+                    <operation>
+                      <type>Load OK</type>
+                      <date>Sun Jul 10 14:17:48 EDT 2016</date>
+                      <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                      <filehistory>
+                        <operation>
+                          <type>app</type>
+                          <date>Thu Jul 07 10:29:52 EDT 2016</date>
+                          <filename>JMRI program</filename>
+                        </operation>
+                        <operation>
+                          <type>Load OK</type>
+                          <date>Thu Jul 07 10:29:53 EDT 2016</date>
+                          <filename>/C:/Users/wolfsong/JMRI/My_JMRI_Railroad/sensorStringPanel.xml</filename>
+                        </operation>
+                        <operation>
+                          <type>Store</type>
+                          <date>Thu Jul 07 10:35:04 EDT 2016</date>
+                          <filename />
+                        </operation>
+                      </filehistory>
+                    </operation>
+                    <operation>
+                      <type>Store</type>
+                      <date>Sun Jul 10 14:20:49 EDT 2016</date>
+                      <filename />
+                    </operation>
+                  </filehistory>
+                </operation>
+                <operation>
+                  <type>Store</type>
+                  <date>Thu Jul 21 20:26:36 EDT 2016</date>
+                  <filename />
+                </operation>
+              </filehistory>
+            </operation>
+            <operation>
+              <type>Store</type>
+              <date>Sat Aug 06 10:08:10 EDT 2016</date>
+              <filename />
+            </operation>
+          </filehistory>
+        </operation>
+        <operation>
+          <type>Store</type>
+          <date>Mon Aug 08 11:16:56 EDT 2016</date>
+          <filename />
+        </operation>
+      </filehistory>
+    </operation>
+    <operation>
+      <type>Store</type>
+      <date>Mon Aug 08 11:27:32 EDT 2016</date>
+      <filename />
+    </operation>
+  </filehistory>
+  <!--Written by JMRI version 4.4-R1ccf76b on Mon Aug 08 11:27:32 EDT 2016 $Id$-->
+</layout-config>
