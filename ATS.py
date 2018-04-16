@@ -70,7 +70,9 @@
 # $Revision: 6.6 $ 4/05/17 added long stop, adjust sending stop msgs to only occur when running
 # $Revision: 6.7 $ 4/15/17 added missing global array for sendLnMsg ARGS
 # $Revision: 6.8 $ 4/20/17 fixed 0xE7 msg filter by moving it before filling ARGS array
-apNameVersion = "Automatic Trolley Sequencer - v6.8"
+# $Revision: 6.9 $ 4/26/17 added sending all stop message to console
+# $Revision: 7.0 $ 5/01/17 reactivate track contact bounce protection
+apNameVersion = "Automatic Trolley Sequencer - v7.0"
 
 import jmri
 import java
@@ -80,6 +82,7 @@ import time
 
 fus = jmri.util.FileUtilSupport()
 trolleyAddressesFile = fus.getUserFilesPath() + "saveTaddresses.cfg"
+print "Using the following trolleyAddressFile:", trolleyAddressesFile
 #trolleyAddressesFile = "C:\Users\wolfsong\JMRI\My_JMRI_Railroad\saveTaddresses.cfg"
 #trolleyAddressesFile = "C:\Users\NVMR\JMRI\PanelPro\saveTaddresses.cfg"
 #trolleyAddressesFile = 'preference:\saveTaddresses.cfg'
@@ -101,6 +104,7 @@ dTrace = True #turn limited section Debug trace print off/on
 lTrace = False #turn msgListener incoming opcode print off/on
 tTrace = False #turn trolley array status print off/on
 sTrace = False #turn sequence view of LocoNet messages off/on
+debounce = True #turn track contact loss debounce off/on
 
 import javax.swing
 aspectColor = " "
@@ -124,7 +128,7 @@ log = LoggerFactory.getLogger("LnScanner")
 import array
 
 mainStartTime = "[init started]" + time.strftime('%X %x %Z')
-
+print "mainStartTime = ", mainStartTime
 import thread
 killed = False #run background task until set true
 resyncInProgress = False #go true when resync button pressed
@@ -138,33 +142,33 @@ print 'seed value of resyncStrtTime = ', resyncStrtTime
 #from java.beans import PropertyChangeListener
 #from java.util.concurrent import ExecutionException
 #from javax.swing import SwingWorker, SwingUtilities
-
+print 'Imports for org.jfree'
 # imports for stripchart portion
 import os;
-from org.jfree.chart import ChartColor
-from org.jfree.chart import ChartFactory
-from org.jfree.chart import ChartFrame
-from org.jfree.chart import ChartPanel
-from org.jfree.chart import ChartUtilities
-from org.jfree.chart import JFreeChart
-from org.jfree.chart.axis import LogarithmicAxis
-from org.jfree.chart.axis import ValueAxis
-#from org.jfree.chart.axis import LogAxis
-from org.jfree.chart.plot import XYPlot
-from org.jfree.chart.plot import ValueMarker
-from org.jfree.chart.renderer.xy import XYLineAndShapeRenderer
-from org.jfree.chart.renderer.xy import XYItemRenderer
-from org.jfree.chart.renderer.xy import XYDotRenderer
-from org.jfree.data.time import Millisecond
-from org.jfree.data.time import TimeSeries
-from org.jfree.data.time import TimeSeriesCollection
-from org.jfree.data.xy import XYDataset
-from org.jfree.ui import ApplicationFrame
-from org.jfree.ui import RefineryUtilities
-from org.jfree.util import ShapeUtilities
-
-from trolley import Trolley
-
+# from org.jfree.chart import ChartColor
+# from org.jfree.chart import ChartFactory
+# from org.jfree.chart import ChartFrame
+# from org.jfree.chart import ChartPanel
+# from org.jfree.chart import ChartUtilities
+# from org.jfree.chart import JFreeChart
+# from org.jfree.chart.axis import LogarithmicAxis
+# from org.jfree.chart.axis import ValueAxis
+# #from org.jfree.chart.axis import LogAxis
+# from org.jfree.chart.plot import XYPlot
+# from org.jfree.chart.plot import ValueMarker
+# from org.jfree.chart.renderer.xy import XYLineAndShapeRenderer
+# from org.jfree.chart.renderer.xy import XYItemRenderer
+# from org.jfree.chart.renderer.xy import XYDotRenderer
+# from org.jfree.data.time import Millisecond
+# from org.jfree.data.time import TimeSeries
+# from org.jfree.data.time import TimeSeriesCollection
+# from org.jfree.data.xy import XYDataset
+# from org.jfree.ui import ApplicationFrame
+# from org.jfree.ui import RefineryUtilities
+# from org.jfree.util import ShapeUtilities
+print "Imports from Trolley"
+#from trolley import Trolley
+print "After Imports from Trolley"
 trolleyLocs = [00,00,00,00,00,00,00,00,00] # filled later with slotID of each trolley
 trolleyMove = [35,35,35,35,35,35,35,35,35] # 35 '#' = empty, 83 'S' = stopped, 82 'R' = running
 motionState = {} #dictionary for throttle state of each trolley, value is '0' = stopped or '1' = running
@@ -212,6 +216,7 @@ Trolley3NotOut = True
 
 suspended = False
 
+print "Done with variable section"
 # *****************************************************************************************
 # ************* Section to Listen to all sensors, printing a line when they change state. *
 # *****************************************************************************************
@@ -257,7 +262,8 @@ class SensorListener(java.beans.PropertyChangeListener):
             # display and/or speak if either range value is empty
             snrStatusArr[systemName] = event.newValue
         return
-        
+     
+print "Defining Listener"   
 listener = SensorListener()
 
 # **********************************************************************
@@ -382,7 +388,7 @@ def whenTgoButtonClicked(event) :
     
     slotID = slotA
     startTrolley()
-    msg1t = "T1go button pressed, slot " + str(slotID) + " trolley started"
+    msg1t = "Start Running button pressed, slot " + str(slotID) + " trolley started"
     print msg1t
     print
     scrollArea.setText(scrollArea.getText() + msg1t + "\n\n")
@@ -440,7 +446,7 @@ class WinListener(java.awt.event.WindowListener):
         freeSlot(slotB)
         freeSlot(slotC)
         time.sleep(3.0) #wait 3 seconds before moving on to allow last free to complete
-        print 'slots freed and window closed'
+        print 'slots freed and ' + apNameVersion + ' exited'
         print
         return
         
@@ -449,7 +455,8 @@ class WinListener(java.awt.event.WindowListener):
         
     def windowDeiconified(self, event):
         return
-        
+
+print "Up to parseMsg"        
 # *************************************
 #create a Llnmon to parse the message *
 # *************************************
@@ -530,6 +537,8 @@ def stopAllTrolleys():
     slotID = slotC
     eStopTrolley() #hard stop now
     lightOff()
+    print 'all trolleys stopped'
+    scrollArea.setText(scrollArea.getText() + " all trolleys stopped\n")
     return
     
 # *********************************************
@@ -1236,12 +1245,15 @@ class MsgListener(jmri.jmrix.loconet.LocoNetListener):
             if sTrace : print "== eventAddr = " + str(eventAddr)
             if eventAddr >= 100 and eventAddr <= 107 :
                 if bTrace : print "eventAddr Rcvd = " + str(eventAddr) #gaw-debug
-                doTrolleyStatusUpdate(eventAddr)
+                if debounce :
+                    sectionOccupied = checkSectionState(eventAddr)
+                    if not sectionOccupied : #ignore if block is already occupied, signal must be due to contact bounce
+                        doTrolleyStatusUpdate(eventAddr)
+                else :
+                    doTrolleyStatusUpdate(eventAddr) #direct call, no track contact bounce
                 #autoTrolleySequencer(eventAddr)
-                #sectionOccupied = checkSectionState(eventAddr)
-                #if not sectionOccupied :
-                #    doTrolleyStatusUpdate(eventAddr)
                 
+                    
         #############################################################
         ## only listen for slot data response message (opcode 231) ##
         ## triggered by throttle requests 0xBF #OPC_LOCO_ADR       ##
@@ -1265,9 +1277,9 @@ class MsgListener(jmri.jmrix.loconet.LocoNetListener):
             ARGS[10] = msg.getElement(10)
             ARGS[11] = msg.getElement(11)
             ARGS[12] = msg.getElement(12)
-            print "2 = " + str(ARGS[2])
-            print "4 = " + str(hex(ARGS[4]))
-            print "9 = " + str(hex(ARGS[9]))
+            #print "2 = " + str(ARGS[2])
+            #print "4 = " + str(hex(ARGS[4]))
+            #print "9 = " + str(hex(ARGS[9]))
             # check for E7 (opcode 231) response message after sending a BF query message (opcode 191)
             ####if BFsent and (hiAddrByte == ARGS[4]) and (loAddrByte == ARGS[9]) :
             if bTrace :
@@ -1332,7 +1344,7 @@ class MsgListener(jmri.jmrix.loconet.LocoNetListener):
                     msgC = "trolleyC = " + str(trolleyC) + " and maps to slot " + str(slotC)
                 else : # can only be respCnt0xE7 == 6
                     BFsent = False #ignore any 0xE7s until this stuff is done
-                    print "Last 0xBF done, no more will be sent"
+                    ####print "Last 0xBF done, no more will be sent"
                     #ignore 0xE7 response to 0xBA request, follow by sending 0xEF to set INUSE slot data
                     writeSlotData()
                     print msgC
@@ -1346,11 +1358,11 @@ class MsgListener(jmri.jmrix.loconet.LocoNetListener):
                     print ATSmsg
                     scrollArea.setText(scrollArea.getText() + ATSmsg + "\n")
                     # this is where you select the voice synthesizer (speak, espeak, or nircmd)
-                    if snSpkChgCheckBox.isSelected():
+                    ##if snSpkChgCheckBox.isSelected():
                         #pid = java.lang.Runtime.getRuntime().exec(["speak", msg])
                         # #pid = java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
-                        pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + ATSmsg + '" -2 100')
-                        pid.waitFor()
+                        ##pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + ATSmsg + '" -2 100')
+                        ##pid.waitFor()
                         
         if oTrace : print "<<==exiting MsgListener"
         inE7 = False
@@ -1420,7 +1432,7 @@ saveTaddrsButton.actionPerformed = whenSaveTaddressesButtonClicked
 quitButton = javax.swing.JButton("Quit")
 quitButton.actionPerformed = whenQuitButtonClicked
 
-tgoButton = javax.swing.JButton("T1go")
+tgoButton = javax.swing.JButton("Start Running")
 tgoButton.actionPerformed = whenTgoButtonClicked
 
 tstopButton = javax.swing.JButton("AllTstop")
@@ -1695,6 +1707,11 @@ jmri.jmrix.loconet.LnTrafficController.instance().addLocoNetListener(0xFF, lnLis
 if bTrace : scrollArea.setText(scrollArea.getText() + mainStartTime + "\n")
 else : scrollArea.setText(scrollArea.getText() + "Init started\n")
 if bTrace : scrollArea.setText(scrollArea.getText() + "[1]" + time.strftime('%X %x %Z') + "\n")
+
+# #############################################
+# # ************* Start of Main ************* #
+# #############################################
+print apNameVersion + ' now running'
 
 # **************************************************************
 # populate PropertyChangeListener with Sensor Message pointers *
