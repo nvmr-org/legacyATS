@@ -1,15 +1,22 @@
 #
-# LnScanner
+# ATS (Automatic Trolley Sequencer)
 #
 # This script has been modified to read in trolley block 
 # occupancy messages and control the speed of the related
-# trolleys as they move on the same track loop.
+# trolleys as they move around the same track loop.
 #
 # This is built on a set of code which can display
 # each sensor event and/or speak it for debugging purposes.
 #
 # It also plots a graph of the number of bytes transmitted
 # on the LocoNet each second
+#
+# Original Author: Bill Robinson with help from Bob Jacobsen
+#
+# $Revision: 1.0 $  1/8/07
+# $Revision: 1.1 $  11/2/10 added second SN address field
+# $Revision: 1.2 $  6/3/11 added SN address range fields and second SW address field
+# $Revision: 1.3 $  9/2/12 added option to print SN address if its state changed
 #
 # Author: Gerry Wolfson
 #
@@ -45,7 +52,37 @@
 # $Revision: 4.7 $ 9/28/16 change to time.sleep(0.5) in MsgListener
 
 # $Revision: 5.0 $ 1/14/17 Start of ATS coding
+# $Revision: 5.1 $ 1/18/17 first debugging after run at club
+# $Revision: 5.2 $ 1/23/17 change to prepLnMsg and sendLnMsg for trolley control
+# $Revision: 5.3 $ 1/31/17 start of query message sending code
+# $Revision: 5.4 $ 2/03/17 refactoring to put init separate from event handler code
+# $Revision: 5.5 $ 2/05/17 made firstBFE7 and slotCnt globals
+# $Revision: 5.6 $ 2/07/17 moved trolley setup code into msgListener
+# $Revision: 5.7 $ 2/12/17 start of multiple trolley squencing code in msgListener
+# $Revision: 5.8 $ 2/14/17 start of multiple trolley squencing code in msgListener
+# $Revision: 5.9 $ 2/25/17 rewrite to use a trolley object oriented approach
+# $Revision: 6.0 $ 2/28/17 removed trolley object oriented code since not used
+# $Revision: 6.1 $ 3/02/17 reworked transition logic to allow BOD dropout and return
+# $Revision: 6.2 $ 3/08/17 reduced to only ATS script (removed PAS code) and added emergency stop function
+# $Revision: 6.3 $ 3/21/17 rework to ring bell after start and show proper icon as trolleys move
+# $Revision: 6.4 $ 3/22/17 added check for section already occupied in case of lost track contact
+# $Revision: 6.5 $ 4/04/17 changed Estop to regular Stop (drifting) going into section 106, turned lights off when exiting or all stopped, fixed allStop to leave loop so not more trolleys will start moving afterwards
+# $Revision: 6.6 $ 4/05/17 added long stop, adjust sending stop msgs to only occur when running
+# $Revision: 6.7 $ 4/15/17 added missing global array for sendLnMsg ARGS
+# $Revision: 6.8 $ 4/20/17 fixed 0xE7 msg filter by moving it before filling ARGS array
+apNameVersion = "Automatic Trolley Sequencer - v6.8"
 
+import jmri
+import java
+####import java.util.concurrent.TimeUnit
+
+import time
+
+fus = jmri.util.FileUtilSupport()
+trolleyAddressesFile = fus.getUserFilesPath() + "saveTaddresses.cfg"
+#trolleyAddressesFile = "C:\Users\wolfsong\JMRI\My_JMRI_Railroad\saveTaddresses.cfg"
+#trolleyAddressesFile = "C:\Users\NVMR\JMRI\PanelPro\saveTaddresses.cfg"
+#trolleyAddressesFile = 'preference:\saveTaddresses.cfg'
 
 # This script displays LocoNet messages.
 # The frame contains JTextFields, a scroll field, check boxes and a button.
@@ -53,34 +90,17 @@
 # when the window is resized.
 # Switch, feedback and sensor messages can be filtered.
 #
-# Author: Bill Robinson with help from Bob Jacobsen
+# editing boolean values: True False (uppercase first letter)
 #
-# $Revision: 1.0 $  1/8/07
-# $Revision: 1.1 $  11/2/10 added second SN address field
-# $Revision: 1.2 $  6/3/11 added SN address range fields and second SW address field
-# $Revision: 1.3 $  9/2/12 added option to print SN address if its state changed
-#
-# editing boolean values: True False
-#
-import jmri
-import java
-import java.util.concurrent.TimeUnit
+trolleySpeed = 0x32 # default throttle set to 50
 
-apNameVersion = "Automatic Trolley Sequencer - v5.0"
-#sensorMsgFile = jmri.util.FileUtil.getUserFilesPath() + "LnSnrMsgList.csv"
-#sensorMsgFile = jmri.util.FileUtil.getUserFilesPath() + "LnSnrMsgTxtV3.csv"
-#sensorMsgFile = jmri.util.FileUtil.getUserFilesPath() + "LnSnrMsgTxtV4.csv"
-#sensorMsgFile = jmri.util.FileUtil.getUserFilesPath() + "LnSnrMsgTxtV5.csv"
-#sensorMsgFile = jmri.util.FileUtil.getUserFilesPath() + "LnSnrMsgTxtV6x.csv"
-#sensorMsgFile = jmri.util.FileUtil.getUserFilesPath() + "LnSnrMsgTxtV7.csv"
-
-userNamePrefix = 'Short Detector' # user name of sensors of interest start with this
-readySensorSystemName = 'LS3000' # sensor used to indicate all short detectors are online
-
-secs2avg = 5 #number of periods to include in each averaging window
-doAvgPlot = False #plot averages for number of accummulated periods
-doSecsPlot = False #plot each seconds total bytes received
-doLogScale = False #select vertical scale to be logarithmic or linear
+iTrace = False #turn enter (In) trace print off/on
+bTrace = False #turn all (Between) enter and exit traces print off/on 
+oTrace = False #turn exit (Out) trace print off/on
+dTrace = True #turn limited section Debug trace print off/on
+lTrace = False #turn msgListener incoming opcode print off/on
+tTrace = False #turn trolley array status print off/on
+sTrace = False #turn sequence view of LocoNet messages off/on
 
 import javax.swing
 aspectColor = " "
@@ -94,6 +114,7 @@ from javax.swing import SwingUtilities
 from javax.swing.text import DefaultCaret
 from java.awt import BasicStroke
 from java.awt.geom import Ellipse2D
+from java.awt import Font
 
 from org.slf4j import Logger
 from org.slf4j import LoggerFactory
@@ -101,10 +122,6 @@ from org.slf4j import LoggerFactory
 log = LoggerFactory.getLogger("LnScanner")
 
 import array
-
-global snrStatusArr
-
-import time
 
 mainStartTime = "[init started]" + time.strftime('%X %x %Z')
 
@@ -146,324 +163,62 @@ from org.jfree.ui import ApplicationFrame
 from org.jfree.ui import RefineryUtilities
 from org.jfree.util import ShapeUtilities
 
+from trolley import Trolley
+
+trolleyLocs = [00,00,00,00,00,00,00,00,00] # filled later with slotID of each trolley
+trolleyMove = [35,35,35,35,35,35,35,35,35] # 35 '#' = empty, 83 'S' = stopped, 82 'R' = running
+motionState = {} #dictionary for throttle state of each trolley, value is '0' = stopped or '1' = running
+#motionState = [0,0,0] #moving state of each trolley, 0 = stopped 1 = running
+maxSpeed = [50,50,50] #default max speed unless replace with file values
+
+trolleyAout = False
+trolleyBout = False
+initCnt = 0 #number of trolleys that have been started
+
+
+trolleyCnt = 3
+trolleyA = 2730 #engine 1 address
+trolleyB = 4887 #engine 2 address
+trolleyC = 4172 #engine 3 address
+trolleyID = trolleyA # set for first trolley to leave section 106
+
 # *******************************************************************************
-# ************* Setup the chart display form for showing LocoNet Bandwidth Used *
+# ******** global variables for passing message values between functions ********
 # *******************************************************************************
-def createChart(dataset):
-    global series
-    global doAvgPlot
-    global doSecsPlot
+ARGS = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] # global args 0 thru 15 filled later (0 ignored, 1 thru 14 args + cksum)
+hiAddrByte = -1
+loAddrByte = -1
+BFsent = False
+firstBFE7 = True        
+noSlotID = True
+notAlt0xE7 = True
+slotCnt = 0
+slotA = -1
+slotB = -1
+slotC = -1
+slotID = -1
+lastDeviceID = -1
+respCnt0xE7 = 0
+newMsgOpCodeHex = 0x00 #place to store latest message opcode in hex
 
-    chart = ChartFactory.createTimeSeriesChart('LocoNet Bandwidth Use (bytes/sec)', 'Time (mins:secs)', 'Message Traffic (bytes)', dataset, True, True, False)
-    plot = chart.getXYPlot()
-    xAxis = plot.getDomainAxis()
-    xAxis.setFixedAutoRange(900000.0) #900 seconds, 15 min stripchart
-    #xAxis.setFixedAutoRange(3600000.0) #3600 seconds, 1 hour stripchart
-    xAxis.setRange(0.0, 2000.0)
-    plot.setDomainAxis(xAxis)
-    if doLogScale:
-        yAxis = LogarithmicAxis('Message Traffic (bytes)')
-        #max bytes = 2057 but should NEVER get anywhere close (network would be saturated)
-        yAxis.setUpperBound(2000.0)
-        yAxis.setLowerBound(0.0)
-        yAxis.setAutoRange(False)
-        #yAxis.setAllowNegativeFlag(True)
-        plot.setRangeAxis(yAxis)
-    else:
-        yAxis = plot.getRangeAxis()
-        #max bytes = 2057 but should NEVER get anywhere close (network would be saturated)
-        yAxis.setUpperBound(2000.0)
-        yAxis.setLowerBound(0.0)
-        yAxis.setAutoRange(False)
-        #yAxis.setAllowNegativeFlag(True)
-        plot.setRangeAxis(yAxis)
-    ##create 60% horizontal line across graph
-    #marker60 = ValueMarker(1234)
-    #marker60.setPaint(ChartColor.YELLOW)
-    ##marker60.setLabel('|     60%') # text is black
-    ##marker60.setStroke(BasicStroke(0x1f))
-    ##marker60.setLabelPaint(ChartColor.YELLOW)
-    #plot.addRangeMarker(marker60)
-    ##create 80% horizontal line across graph
-    #marker80 = ValueMarker(1646)
-    #marker80.setPaint(ChartColor.LIGHT_RED)
-    ##marker80.setLabel('|     80%') # text is black
-    ##marker80.setStroke(BasicStroke(0x1f))
-    ##marker80.setLabelPaint(ChartColor.RED)
-    #plot.addRangeMarker(marker80)
-    xAxis.setAutoRange(True) #forces plotting to start
-    #validate all background color settings
-    plot.setBackgroundPaint(ChartColor.DARK_BLUE)
-    plot.setBackgroundPaint(ChartColor.DARK_CYAN)
-    plot.setBackgroundPaint(ChartColor.DARK_GREEN)
-    plot.setBackgroundPaint(ChartColor.DARK_MAGENTA)
-    plot.setBackgroundPaint(ChartColor.DARK_RED)
-    plot.setBackgroundPaint(ChartColor.DARK_YELLOW)
-    plot.setBackgroundPaint(ChartColor.LIGHT_BLUE)
-    plot.setBackgroundPaint(ChartColor.LIGHT_CYAN)
-    plot.setBackgroundPaint(ChartColor.LIGHT_GREEN)
-    plot.setBackgroundPaint(ChartColor.LIGHT_MAGENTA)
-    plot.setBackgroundPaint(ChartColor.LIGHT_RED)
-    plot.setBackgroundPaint(ChartColor.LIGHT_YELLOW)
-    plot.setBackgroundPaint(ChartColor.BLUE)
-    plot.setBackgroundPaint(ChartColor.CYAN)
-    plot.setBackgroundPaint(ChartColor.GREEN)
-    plot.setBackgroundPaint(ChartColor.MAGENTA)
-    plot.setBackgroundPaint(ChartColor.RED)
-    plot.setBackgroundPaint(ChartColor.YELLOW)
-    plot.setBackgroundPaint(ChartColor.ORANGE)
-    #plot.setBackgroundPaint(ChartColor.BROWN) # does not exist
-    #plot.setBackgroundPaint(ChartColor.PURPLE) # does not exist
-    plot.setBackgroundPaint(ChartColor.VERY_DARK_BLUE)
-    plot.setBackgroundPaint(ChartColor.VERY_DARK_CYAN)
-    plot.setBackgroundPaint(ChartColor.VERY_DARK_GREEN)
-    plot.setBackgroundPaint(ChartColor.VERY_DARK_MAGENTA)
-    plot.setBackgroundPaint(ChartColor.VERY_DARK_RED)
-    plot.setBackgroundPaint(ChartColor.VERY_DARK_YELLOW)
-    plot.setBackgroundPaint(ChartColor.VERY_LIGHT_BLUE)
-    plot.setBackgroundPaint(ChartColor.VERY_LIGHT_CYAN)
-    plot.setBackgroundPaint(ChartColor.VERY_LIGHT_GREEN)
-    plot.setBackgroundPaint(ChartColor.VERY_LIGHT_MAGENTA)
-    plot.setBackgroundPaint(ChartColor.VERY_LIGHT_YELLOW)
-    plot.setBackgroundPaint(ChartColor.WHITE)
-    plot.setBackgroundPaint(ChartColor.LIGHT_GRAY)
-    plot.setBackgroundPaint(ChartColor.GRAY)
-    plot.setBackgroundPaint(ChartColor.DARK_GRAY)
-    plot.setBackgroundPaint(ChartColor.BLACK)
-    #defaults to last background color if uncommented copy of another setBackgroundPaint is not next
-    plot.setBackgroundPaint(ChartColor.LIGHT_GRAY)
-    #plot.setBackgroundPaint(ChartColor.BLUE)
-    plot.setBackgroundAlpha(1.0)
-    plot.setDomainMinorGridlinePaint(ChartColor.GRAY)
-    plot.setDomainGridlinePaint(ChartColor.DARK_GRAY)
-    plot.setRangeMinorGridlinePaint(ChartColor.GRAY)
-    plot.setRangeGridlinePaint(ChartColor.DARK_GRAY)
-    renderer = XYLineAndShapeRenderer()
-    renderer.setSeriesShape(0, Ellipse2D.Double()) #%30 = 617 bytes
-    renderer.setSeriesShape(1, Ellipse2D.Double()) #%45 = 926 bytes
-    renderer.setSeriesShape(2, Ellipse2D.Double()) #%60 = 1234 bytes
-    renderer.setSeriesShape(3, Ellipse2D.Double()) #%80 = 1646 bytes
-    if doSecsPlot:
-        renderer.setSeriesShape(4, Ellipse2D.Double())
-    if doAvgPlot:
-        renderer.setSeriesShape(5, Ellipse2D.Double())
+msgA = "" #placeholder for trolley info message
+msgB = "" #placeholder for trolley info message
+msgC = "" #placeholder for trolley info message
+        
+AllTrolleysNotOut = True
+Trolley1NotOut = True
+Trolley2NotOut = True
+Trolley3NotOut = True
 
-    #renderer.setSeriesShape(0,Ellipse2D.Double(-1.0,-1.0,1.0,1.0))
-    #renderer.setSeriesShape(1,Ellipse2D.Double(-1.0,-1.0,1.0,1.0))
-    #renderer.setSeriesShape(2,Ellipse2D.Double(-1.0,-1.0,1.0,1.0))
-
-    # sets paint color for each series
-    renderer.setSeriesPaint(0, ChartColor.RED)
-    renderer.setSeriesPaint(1, ChartColor.ORANGE)
-    renderer.setSeriesPaint(2, ChartColor.YELLOW)
-    renderer.setSeriesPaint(3, ChartColor.GREEN)
-    if doSecsPlot:
-        renderer.setSeriesPaint(4, ChartColor.DARK_BLUE)
-    if doAvgPlot:
-        renderer.setSeriesPaint(5, ChartColor.VERY_DARK_GREEN)
-    # sets line thickness for each series
-    renderer.setSeriesStroke(0, BasicStroke(2.0))
-    renderer.setSeriesStroke(1, BasicStroke(2.0))
-    renderer.setSeriesStroke(2, BasicStroke(2.0))
-    renderer.setSeriesStroke(3, BasicStroke(2.0))
-    if doSecsPlot:
-        renderer.setSeriesStroke(4, BasicStroke(1.0))
-    if doAvgPlot:
-        renderer.setSeriesStroke(5, BasicStroke(1.0))
-    plot.setRenderer(renderer)
-    #ChartUtilities.applyCurrentTheme(chart) #don't use, reverts to some other configuration of the layout!
-    return chart
-
-# ***********************************************************
-# ************* Setup and run task in background to update  *
-#               LocoNet BW Use graph at a 1 second interval *
-# ***********************************************************
-def plotUpdater():
-    global killed
-    global accumByteCnt
-    global series
-    global secs2avg
-    global doAvgPlot
-    global doSecsPlot
-
-    print 'plotUpdate running'
-    start_time = time.clock()
-    print 'start_time = ', start_time
-
-    # init for sliding window averaging
-    avgByteCnt = 0
-    oldValList = [0 for i in range(secs2avg)] # values to subtract on each sliding window sum
-    oldestValPntr = 0
-    #for i in range(secs2avg) :
-    #    print 'oldValList(', i, ') = ', oldValList[i] #view inited list values
-    while killed == False: #exit thread when killed is true
-        time.sleep(0.01) #sleep for a 10 ms to allow foreground to run
-        #time.sleep(0.1) #sleep for tenth of a second
-        end_time = time.clock()
-        elapsed_time = end_time - start_time
-        # plot new points every 1 second
-        if elapsed_time > 1:
-            start_time = end_time
-            #print 'elapsed_time = ', elapsed_time
-            # prepare accummulated value for a single period
-            plotByteCnt = accumByteCnt
-            accumByteCnt = 0 #reset for foreground task
-            
-            # prepare plot point of average value for a given period
-            #print 'oldestValPntr (before) = ', oldestValPntr
-            avgByteCnt += plotByteCnt #add single point value to continuously accumulated value for averaging
-            avgByteCnt -= oldValList[oldestValPntr] #reduce accummulated value by oldest period value
-            oldValList[oldestValPntr] = plotByteCnt #save newest period value into oldest location
-            oldestValPntr = (oldestValPntr + 1) % secs2avg # move pointer to next oldest value with wrap to zero
-            accumAvgCnt = avgByteCnt / (secs2avg * 1.0) #now get floating point average of this period
-            #print 'oldestValPntr (after) = ', oldestValPntr
-            #print 'accumAvgCnt = ', accumAvgCnt
-            
-            # append all four to graph
-            #print 'plotByteCnt = ', plotByteCnt, end_time
-            hzline80.add(Millisecond(), 1646)
-            hzline60.add(Millisecond(), 1234)
-            hzline30.add(Millisecond(), 617)
-            hzline15.add(Millisecond(), 309)
-            if doSecsPlot:
-                series.add(Millisecond(), plotByteCnt)
-            if doAvgPlot:
-                avgAccum.add(Millisecond(), accumAvgCnt)
-    print 'plotUpdate stopped'
-    return
-    
-# *******************************************************************************
-# ************* Setup and start task in background to scan sensor status array  *
-#               and report ACTIVE ones with a message string which is displayed *
-#               and/or spoken.                                                  *
-# *******************************************************************************
-def scanReporter():
-    global snrStatusArr
-    global killed
-    global resyncInProgress
-    global resyncStrtTime
-    global checkRestoreDone
-    global lastSnSpkChgCbx
-    global lastSigSpkChgCbx
-    
-    # repeat delay flag for alert given on last loop
-    repeatDelayFlag = False
-    
-    scanPntr = 0
-    retcode = 0
-    #print snrStatusArr[0]
-    #print scanPntr
-    print 'scanReporter running'
-    while killed == False: #exit thread when killed is true
-        if repeatDelayFlag:
-            time.sleep(10.0) #wait 10 seconds before scanning loop again
-            repeatDelayFlag = False #clear delay flag for next pass thru loop
-        else:
-            #time.sleep(0.01) #sleep for a 10 ms to allow foreground to run
-            time.sleep(0.0005) #sleep for a 0.5 ms to allow foreground to run
-
-        # Check if first sensor and if so check if resync has just completed
-        if ((time.clock() - resyncStrtTime) >= 15.0):
-            resyncInProgress = False
-        if (not(resyncInProgress) and not(checkRestoreDone)):
-            print 'lastSnSpkChgCbx = ', lastSnSpkChgCbx
-            print 'lastSigSpkChgCbx = ', lastSigSpkChgCbx
-            checkRestoreDone = True
-            snSpkChgCheckBox.setSelected(lastSnSpkChgCbx) #restore this checkbox to it's last known state
-            sigSpkChgCheckBox.setSelected(lastSigSpkChgCbx) #restore this checkbox to it's last known state
-            print 'time.clock() = ', time.clock()
-            print 'resyncInProgress = ', resyncInProgress
-            print 'lastSnSpkChgCbx = ', lastSnSpkChgCbx
-            print 'lastSigSpkChgCbx = ', lastSigSpkChgCbx
-        #print time.strftime('=> %X %x %Z')
-        # Check all JMRI sensor status values and if ACTIVE display and/or speak
-        for systemName in snrStatusArr.keys():
-            if snrStatusArr[systemName] == ACTIVE:
-                if int(systemName[2:]) >= java.lang.Integer.decode(rangeAdd1.text) and int(systemName[2:]) <= java.lang.Integer.decode(rangeAdd2.text):
-                    msg = sensors.getSensor(systemName).getComment()
-                    #print msg
-                    #print time.strftime('%X %x %Z')
-                    if msg and len(msg) > 0:
-                        if indexCheckBox.isSelected():
-                            print 'msg length of index: ', scanPntr, '(', systemName,') = ', len(msg)
-                            scrollArea.setText(scrollArea.getText() + systemName + " = " + msg + "\n")
-                        else:
-                            scrollArea.setText(scrollArea.getText() + msg + "\n")
-                    else:
-                        msg = systemName + " has no message"
-                        #msg = str(scanPntr) + " has no message"
-                        scrollArea.setText(scrollArea.getText() + msg + "\n")
-                        
-                    # You can also speak the message by un-commenting one of the following "pid = " lines
-                    if snSpkChgCheckBox.isSelected() :  
-                        time.sleep(0.1) #add a 0.1 sec delay
-                        #time.sleep(1.0) #add a sec delay
-                        # this is where you select the voice synthesizer (speak, espeak, or nircmd)           
-                        #pid = java.lang.Runtime.getRuntime().exec(["speak", msg])
-                        #pid = java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
-                        pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + msg +'" -2 100')
-                        pid.waitFor()
-                        repeatDelayFlag = True #set flag so loop will delay before next pass thru loop
-
-                # if len(msg) > 0 :
-                    # if indexCheckBox.isSelected() :
-                        # print 'msg length of ', scanPntr, ' = ', len(msg)
-                        # scrollArea.setText(str(scanPntr)+" = " + msg + "\n")
-                    # else :
-                        # scrollArea.setText(msg+"\n")
-                # else :
-                    # msg = str(scanPntr) + " has no message"
-                    # scrollArea.setText(msg+"\n")
-                
-                    ##time.sleep(0.1)
-                    #time.sleep(1.0)
-                    # You can also speak the message by un-commenting the next line
-                    ##if snSpkChgCheckBox.isSelected():
-                        # this is where you select the voice synthesizer (speak, espeak, or nircmd)
-                        #pid = java.lang.Runtime.getRuntime().exec(["speak", msg])
-                        #pid = java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
-                        ##pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + msg + '" -2 100')
-                        ##pid.waitFor()
-                        
-    print 'scanReporter stopped'
-    return False
-    
-# ******************************************************************************
-#class Task(SwingWorker) :
-
-#    def __init__(self):
-#        SwingWorker.__init__(self)
-
-#    def doInBackground(self) :
-#        global snrStatusArr
-#        global maxArr
-
-#        scanPntr = 0
-#        while(True) : #loop forever
-#            #Sleep then check next sensor status array value and if "1" display and/or speak
-#            try:
-#                Thread.sleep(10)
-#                if snrStatusArr[scanPntr] == 1 :
-#                    msg = msgArr[scanPntr]
-#                    scrollArea.setText(scrollArea.getText()+msg+"\n")
-#                    # You can also speak the message by un-commenting the next line
-#                    java.lang.Runtime.getRuntime().exec('nircmd speak text "' + msg +'" -2 100')
-#                    #java.lang.Runtime.getRuntime().exec(["speak", msg])
-#                    #java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
-#                    scanPntr += 1 #decrement counter
-#                    if scanPntr > maxArr : #reset to zero if greater than max value
-#                        scanPntr = 0
-#            except InterruptedException, e :
-#                pass
-# ******************************************************************************
+suspended = False
 
 # *****************************************************************************************
 # ************* Section to Listen to all sensors, printing a line when they change state. *
 # *****************************************************************************************
 
-# **********************************************
-# Define routine to map status numbers to text *
-# **********************************************
+# ************************************************
+# * Define routine to map status numbers to text *
+# ************************************************
 def stateName(state):
     if (state == ACTIVE):
         return "ACTIVE"
@@ -475,10 +230,10 @@ def stateName(state):
         return "UNKNOWN"
     return "(invalid)"
     
-# ****************************************
-# Define the sensor listener: Print some *
-# information on the status change.      *
-# ****************************************
+# ******************************************
+# * Define the sensor listener: Print some *
+# * information on the status change.      *
+# ******************************************
 class SensorListener(java.beans.PropertyChangeListener):
 
     def propertyChange(self, event):
@@ -522,10 +277,15 @@ class ManagerListener(java.beans.PropertyChangeListener):
 # Attach the sensor manager listener
 sensors.addPropertyChangeListener(ManagerListener())
 
-# **********************************
-# ******************** End section *
-# **********************************
+# ***************************
+# * End of Sensor Listener section *
+# ***************************
 
+# ***************************
+# * Button Pressed Services *
+# ***************************
+
+# *******************************************************
 # have the text field enable the button when OK NOT used
 def whenAddressChanged(event):
     if (address.text != ""): #address only changed if a value was entered
@@ -535,10 +295,12 @@ def whenAddressChanged(event):
         swAddrCheckBox.setEnabled(False)
     return
     
+# *******************************************************
 # define what button does when clicked and attach that routine to the button
 def whenEnterButtonClicked(event): #not used
     return
     
+# *******************************************************
 def whenResyncButtonClicked(event):
     global resyncInProgress
     global resyncStrtTime
@@ -567,14 +329,79 @@ def whenResyncButtonClicked(event):
     #sigSpkChgCheckBox.setSelected(lastSigSpkChgCbx)
     return
     
-def whenClearButtonClicked(event):
-    #print "got to here"
-    scrollArea.setText("") #clear the text area
-    return
+# *******************************************************
+# def whenClearButtonClicked(event): #not used
+    # #print "got to here"
+    # scrollArea.setText("") #clear the text area
+    # return
     
+# *******************************************************
 def whenQuitButtonClicked(event): #not used
     return
     
+# *******************************************************
+def whenSaveTaddressesButtonClicked(event):
+    global trolleyA,trolleyB,trolleyC
+    global maxSpeed
+    
+    #write current trolley address fields to a new trolleyAddresses.cfg file to be read in on next launch
+    trolleyA = trolleyAaddr.text
+    trolleyB = trolleyBaddr.text
+    trolleyC = trolleyCaddr.text
+    speedA = trolleyAspeed.text
+    speedB = trolleyBspeed.text
+    speedC = trolleyCspeed.text
+    if os.path.isfile(trolleyAddressesFile):
+        os.remove(trolleyAddressesFile)
+    fp=open(trolleyAddressesFile,'w')
+    fp.write(str(trolleyA))
+    fp.write('\n')
+    fp.write(str(trolleyB))
+    fp.write('\n')
+    fp.write(str(trolleyC))
+    fp.write('\n')
+    fp.write(str(speedA))
+    fp.write('\n')
+    fp.write(str(speedB))
+    fp.write('\n')
+    fp.write(str(speedC))
+    fp.write('\n')
+    fp.close()
+    print "T1 file value of trolleyA = " + str(trolleyA)
+    print "T1 file value of maxSpeed[0] = " + str(speedA)
+    print "T2 file value of trolleyB = " + str(trolleyB)
+    print "T2 file value of maxSpeed[1] = " + str(speedB)
+    print "T3 file value of trolleyC = " + str(trolleyC)
+    print "T3 file value of maxSpeed[2] = " + str(speedC)
+    
+    return
+    
+# *******************************************************
+def whenTgoButtonClicked(event) :
+    global slotID
+    
+    slotID = slotA
+    startTrolley()
+    msg1t = "T1go button pressed, slot " + str(slotID) + " trolley started"
+    print msg1t
+    print
+    scrollArea.setText(scrollArea.getText() + msg1t + "\n\n")
+    
+    return
+    
+# *******************************************************
+def whenTstopAllButtonClicked(event) :
+    global slotID
+    global suspended
+    
+    stopAllTrolleys()
+    suspended = True
+    return
+    
+# *****************************************
+# * End of Button Presed Services section *
+# *****************************************
+
 # *************************************************************************
 # WindowListener is a interface class and therefore all of it's           *
 # methods should be implemented even if not used to avoid AttributeErrors *
@@ -608,7 +435,13 @@ class WinListener(java.awt.event.WindowListener):
         return
         
     def windowClosed(self, event):
-        #print 'window closed'
+        stopAllTrolleys()
+        freeSlot(slotA)
+        freeSlot(slotB)
+        freeSlot(slotC)
+        time.sleep(3.0) #wait 3 seconds before moving on to allow last free to complete
+        print 'slots freed and window closed'
+        print
         return
         
     def windowIconified(self, event):
@@ -626,90 +459,716 @@ parseMsg.setLocoNetSensorManager(sensors)
 parseMsg.setLocoNetTurnoutManager(turnouts)
 parseMsg.setLocoNetReporterManager(reporters)
 
+# ************************
+# Emergency stop trolley *
+# ************************
+def eStopTrolley() :
+    global slotID
+    global ARGS
+    
+    msgLength = 4
+    opcode = 0xA0 #OPC_LOCO_SPD
+    ARGS[1] = slotID
+    ARGS[2] = 0x01
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Estop " + str(hex(opcode))
+    return
+
+# **********************
+# Move or stop trolley *
+# **********************
+def setTrolleySpeed(speed) :
+    global slotID
+    global ARGS
+    
+    msgLength = 4
+    opcode = 0xA0 #OPC_LOCO_SPD
+    ARGS[1] = slotID
+    ARGS[2] = speed
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Set Speed " + str(hex(opcode))
+    return
+
+# *******************************************************
+def stopTrolley():
+    global slotID
+    
+    setTrolleySpeed(0x1E) #set speed to 30
+    time.sleep(0.5) #wait 500 milliseconds
+    setTrolleySpeed(0x0F) #set speed to 15
+    time.sleep(0.5) #wait 500 milliseconds
+    eStopTrolley() #hard stop now
+    time.sleep(0.5) #wait half a second after after stop, then ring bell
+    ringBell()
+    if tTrace: scrollArea.setText(scrollArea.getText() + "slot " + str(slotID) + " trolley stopped\n")
+    return
+    
+# *******************************************************
+def lstopTrolley():
+    global slotID
+    
+    setTrolleySpeed(0x1E) #set speed to 30
+    time.sleep(1.0) #wait 1 second
+    setTrolleySpeed(0x0F) #set speed to 15
+    time.sleep(1.0) #wait 1 second
+    eStopTrolley() #hard stop now
+    time.sleep(0.5) #wait half a second after after stop, then ring bell
+    ringBell()
+    if tTrace: scrollArea.setText(scrollArea.getText() + "slot " + str(slotID) + " trolley stopped\n")
+    return
+    
+# *******************************************************
+def stopAllTrolleys():
+    global slotID
+    
+    slotID = slotA
+    eStopTrolley() #hard stop now
+    lightOff()
+    slotID = slotB
+    eStopTrolley() #hard stop now
+    lightOff()
+    slotID = slotC
+    eStopTrolley() #hard stop now
+    lightOff()
+    return
+    
+# *********************************************
+# Ring the trolley bell before start and stop *
+# *********************************************
+def ringBell() :
+    global slotID
+    global ARGS
+    
+    #ringBell 1st time by setting F1 = ON
+    msgLength = 4
+    opcode = 0xA1 #OPC_LOCO_DIRF
+    ARGS[1] = slotID
+    ARGS[2] = 0x11 #ON with direction forward and light ON
+    sendLnMsg(msgLength,opcode,ARGS)
+    
+    time.sleep(1) #wait 1 sec before toggling other way
+    
+    #ringBell 2nd time by setting F1 = OFF
+    msgLength = 4
+    opcode = 0xA1 #OPC_LOCO_DIRF
+    ARGS[1] = slotID
+    ARGS[2] = 0x10 #OFF with direction forward and light ON
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent ring bell " + str(hex(opcode))
+    
+    #time.sleep(3) #wait 3 sec before returning
+    return
+
+# **************************
+# Turn light OFF *
+# **************************
+def lightOff() :
+    global slotID
+    global ARGS
+
+    msgLength = 4
+    opcode = 0xA1 #OPC_LOCO_DIRF
+    ARGS[1] = slotID
+    ARGS[2] = 0x00 #light OFF, direction forward
+    time.sleep(1.0) #wait 1 second before sending in case decoder is processing a previous command
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent light OFF " + str(hex(opcode))
+    time.sleep(1.0) #wait 1 second before returning to let decoder finish processing this command
+    
+    return
+    
+# **************************
+# Blink light and leave ON *
+# **************************
+def blinkOn() :
+    global slotID
+    global ARGS
+    
+    count = 5
+    
+    while (count > 0) :
+        count -= 1
+        
+        time.sleep(0.5) #wait half sec before toggling
+
+        msgLength = 4
+        opcode = 0xA1 #OPC_LOCO_DIRF
+        ARGS[1] = slotID
+        ARGS[2] = 0x00 #light OFF, direction forward
+        sendLnMsg(msgLength,opcode,ARGS)
+
+        time.sleep(0.5) #wait half sec before toggling
+
+        msgLength = 4
+        opcode = 0xA1 #OPC_LOCO_DIRF
+        ARGS[1] = slotID
+        ARGS[2] = 0x10 #light ON, direction forward
+        sendLnMsg(msgLength,opcode,ARGS)
+        if sTrace : print "sent light ON/OFF " + str(hex(opcode))
+
+    return
+    
+# ****************
+# Set Slot INUSE *
+# ****************
+def setSlotInuse() :
+    global slotID
+    global ARGS
+    
+    msgLength = 4
+    opcode = 0xBA #OPC_MOVE_SLOTS
+    ARGS[1] = slotID
+    ARGS[2] = slotID
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Slot INUSE " + str(hex(opcode))
+    noSlotID = False
+    return
+    
+# ****************
+# Write Slot Data *
+# ****************
+def writeSlotData() :
+    global slotID
+    global ARGS
+    
+    msgLength = 14
+    opcode = 0xEF #OPC_WR_SL_DATA
+    
+    #### ARGS[1] =0x0E #part of OPC
+    #### ARGS[2] = slotID taken from last 0xE7 response
+    ARGS[3] = 0x33 #change from 0x03 to refresh INUSE
+    #use rest of ARGS from last 0xE7 response
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Slot Data Update " + str(hex(opcode))
+    return
+    
+# *******************
+# Update Slot STAT1 *
+# *******************
+def updateSlot() :
+    global slotID
+    global ARGS
+    
+    msgLength = 4
+    opcode = 0xB5 #OPC_SLOT_STAT1
+    ARGS[1] = slotID
+    ARGS[2] = 0x03
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Slot Stat1 Update " + str(hex(opcode))
+    return
+    
+# ***************************************
+# Free Trolley Slot (Dispatch Trolleys) *
+# ***************************************
+def freeSlot(slotNum) :
+    global ARGS
+    global slotID
+    
+    slotID = slotNum #set global for use elsewhere
+    setTrolleySpeed(0x00) #stop trolley
+
+    msgLength = 4
+    opcode = 0xB5 #OPC_SLOT_STAT1
+    ARGS[1] = slotNum
+    ARGS[2] = 0x13 #update status to Not Consisted, Common slot
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Slot Not Consisted & Common " + str(hex(opcode))
+    
+    msgLength = 4
+    opcode = 0xBA #OPC_MOVE_SLOTS
+    ARGS[1] = slotNum
+    ARGS[2] = 0x00 #mark slot as DISPATCHED
+    sendLnMsg(msgLength,opcode,ARGS)
+    if sTrace : print "sent Slot Dispatch " + str(hex(opcode))
+    
+    updateSlot() #sets slot to being FREE
+
+    return
+                
+# **********************
+# Send LocoNet Message *
+# **********************
+def sendLnMsg(msgLength,opcode,ARGS) :
+     # format and send the specific LocoNet message
+     # send up to 16 bytes in the message - includes checksum
+     if iTrace : print "==>>entering sendLnMsg -->"
+     packet = jmri.jmrix.loconet.LocoNetMessage(msgLength)
+     if msgLength == 4 :
+        packet.setElement(0, opcode)
+        packet.setElement(1, ARGS[1])
+        packet.setElement(2, ARGS[2])
+     else :
+        packet.setElement(0, opcode)
+        packet.setElement(1, ARGS[1])
+        packet.setElement(2, ARGS[2])
+        packet.setElement(3, ARGS[3])
+        packet.setElement(4, ARGS[4])
+        packet.setElement(5, ARGS[5])
+        packet.setElement(6, ARGS[6])
+        packet.setElement(7, ARGS[7])
+        packet.setElement(8, ARGS[8])
+        packet.setElement(9, ARGS[9])
+        packet.setElement(10, ARGS[10])
+        packet.setElement(11, ARGS[11])
+        packet.setElement(12, ARGS[12])
+        packet.setElement(13, ARGS[13])
+      
+     jmri.jmrix.loconet.LnTrafficController.instance().sendLocoNetMessage(packet)
+     if iTrace : print "Packet ==>> ", packet           # print packet to Script Output window
+     ##prevMsg.setText(str(packet))     # put packet in hex in field
+     if oTrace : print "<<==exiting sendLnMsg"
+     return
+
+# *************************
+# Prepare LocoNet Message *
+# *************************  
+def prepLnAddr(lnAddress) :
+    global hiAddrByte
+    global loAddrByte
+    
+    if iTrace : print "==>>entering prepLnAddr"
+    #translate address into digitrax msb and lsb values
+    dtxAddress = int(lnAddress)    # get address from entry field for LocoNet
+    hiAddrByte = dtxAddress - ((dtxAddress / 128) * 128) #most significant address byte
+    loAddrByte = dtxAddress / 128 #least significant address byte
+    if bTrace : print "hiAddrByte = "  + hex(hiAddrByte)
+    if bTrace : print "loAddrByte = " + hex(loAddrByte)
+    
+    if oTrace : print "<<==exiting prepLnAddr"
+    return
+
 # *******************************************************
 # ************* Automated Trolley Sequencer *************
 # *******************************************************
 # Initial state is with all trolleys on the Townside Dual line track (section 106)
 # Block 1 contains sections 2,7,4, and 3 then 7 and 2 again in that order
 #
-sectionState = [0,0,6,0,0,0,0,0] # start with all sections empty except 106
-blockState = [0,0,0,1] # start with all blocks empty except 3
-steer102 = True
-steer107 = True
-currentTrolleyID = 1 # first trolley ID, others are 2 an 3
+bitToChg = 0
+bitStateToSet = 0
+
 trolley1SecIdx = 1 # all three trolleys in section 101 (Aisle Side Town Main)
 trolley2SecIdx = 1
 trolley3SecIdx = 1
 
-def autoTrolleySequencer(eventAddr, trolleyID):
-    global steer102
-    global steer107
-
-    # Show states before move
-    # display current sectionState list on system console
-    ##print "sectionState = " + str(sectionState).strip('[]')
-    # display current blockState list on system console
-    ##print "blockState = " + str(blockState).strip('[]')
-                  
-    #set entered section and related block to trolley ID
-    if eventAddr == 100 :
-        sectionState[0] = sectionState[6]
-        sectionState[6] = 0
-    elif eventAddr == 101 :
-        sectionState[1] = sectionState[0]
-        sectionState[0] = 0    
-    elif eventAddr == 102 :
-        if steer102 :
-            #1st time
-            sectionState[2] = sectionState[1]
-            sectionState[1] = 0
-            steer102 = False
-        else :
-            #2nd time
-            sectionState[2] = sectionState[7]
-            sectionState[7] = 0
-            steer102 = True
-    elif eventAddr == 103 :
-        sectionState[3] = sectionState[4]
-        sectionState[4] = 0    
-    elif eventAddr == 104 :
-        sectionState[4] = sectionState[7]
-        sectionState[7] = 0    
-    elif eventAddr == 105 : #should not come in at present
-        sectionState[5] = sectionState[5]
-        sectionState[5] = 0    
-    elif eventAddr == 106 :
-        sectionState[6] = sectionState[2]
-        sectionState[2] = 0
-        sectionState[3] = 0
-        sectionState[4] = 0
-        sectionState[7] = 0
-    else : # only thing left is 107
-        if steer107 :
-            #1st time
-            sectionState[7] =sectionState[2]
-            sectionState[2] = 0
-            steer107 = False
-        else :
-            #2nd time
-            sectionState[7] =sectionState[3]
-            sectionState[3] = 0
-            steer107 = True
-
-    # Show states after move
-    # display current sectionState list on system console
-    print "sectionState = " + str(sectionState).strip('[]')
-    # display current blockState list on system console
-    #print "blockState = " + str(blockState).strip('[]')
-    print
-        
+# *******************************************************
+def requestSlot(deviceID) : #sends 0xBF with loco address
+    global ARGS
+    global hiAddrByte
+    global loAddrByte
+    global BFsent
+    global noSlotID
+    global lastDeviceID
+    
+    if iTrace : print "==>>entering requestSlot"
+    if bTrace : print "requested slot = " + str(deviceID)
+    noSlotID = True
+    lastDeviceID = deviceID
+    prepLnAddr(deviceID)
+    if bTrace : print "prep return = " +hex(hiAddrByte) + " " + hex(loAddrByte)
+    #request Loco data slot
+    msgLength = 4
+    opcode = 0xBF #OPC_LOCO_ADR request current slot assigned, if not create slot
+    ARGS[1] = loAddrByte
+    ARGS[2] = hiAddrByte
+    sendLnMsg(msgLength,opcode,ARGS)
+    BFsent = True #turn on to allow E7 response to be read for slotID (flag set must be after send!)
+    if sTrace : print "sent Slot Request " + str(hex(opcode))
+    if oTrace : print "<<==exiting requestSlot"
     return
-                    
-    #look ahead into next block and set throttle
-    #if next block R, stopped
-    #if next block Y, run at half throttle
-    #if next block G, run at half throttle
+        
+# *******************************************************
+def setSlotID(deviceID):
+    global noSlotID
+    global slotID
+    global lastDeviceID
+    
+    passedID = -1
+    
+    if iTrace : print "==>>entering setSlotID"
+    ##noSlotID = True
+    passedID = deviceID
+    deviceID = slotID # populate slot(letter) with reponse value
+    if bTrace : print "deviceID = " + str(lastDeviceID) + " " + str(passedID) + " = " + str(slotID)
+    if oTrace : print "<<==exiting setSlotID"
+    return deviceID
+
+# *******************************************************
+def doTrolleySequence():
+    global slotID
+    
+    ####ringBell() #bell should only ring when about to move
+    setTrolleySpeed(0x00) #set speed to 0
+    time.sleep(10.0) #wait 10 secs before doing slowdown sequence
+    ringBell()
+    time.sleep(3.0) #wait 3 secs after ringing bell and then go
+    setTrolleySpeed(trolleySpeed) #set speed to 50
+    return
+    
+# *******************************************************
+def startTrolley():
+    global slotID
+    
+    setTrolleySpeed(trolleySpeed) #set speed to 50
+    ####time.sleep(3.0) #wait 3 secs after ringing bell and then go
+    ringBell()
+    if tTrace: scrollArea.setText(scrollArea.getText() + "slot " + str(slotID) + " trolley running\n")
+    return
+    
+# *******************************************************
+def checkSectionState(eventAddr) :
+    global trolleyLocs
+    
+    if eventAddr == 106 :
+        if trolleyLocs[0] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 100 :
+        if trolleyLocs[1] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 101 :
+        if trolleyLocs[2] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 102 :
+        if trolleyLocs[3] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 107 :
+        if trolleyLocs[4] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 104 :
+        if trolleyLocs[5] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 103 :
+        if trolleyLocs[6] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 107 :
+        if trolleyLocs[7] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 102 :
+        if trolleyLocs[8] > 0 : # greater means occupied
+            return True
+    else :
+        return False
+
+# **************************************************
+# * Updates Trolley Status Array with position of  *
+# * slotIDs and displays result in square brackets *
+# **************************************************
+def doTrolleyStatusUpdate(eventID):
+    global slotID
+    global trolleyLocs
+    global trolleyMove
+    global motionState
+    global trolleyAout
+    global trolleyBout
+    global initCnt
+    global suspended
+    
+    if suspended :
+        if tTrace: print "suspended"
+        scrollArea.setText(scrollArea.getText() + "suspended 1\n")
+        return
+        
+    #*****************************************************************************
+    if sTrace : print ">>rcvd " + str(eventID)
+    if initCnt < 3 : # init process to spread out trolleys in separate sections
+        print ">>init eventID = " + str(eventID)
+        if (eventID <> 105) and (eventID <> 106) :
+            initCnt += 1 #bump count up by one
+            #****************************************
+            if initCnt == 1 : #trolley A should enter section 100
+                trolleyLocs[1] = slotA #trolleyA on the move so do not have to set speed
+                trolleyMove[1] = 82 #R
+                motionState[str(slotA)] = '1'
+                if sTrace : print ">>initCnt = " + str(initCnt)
                 
+            elif initCnt == 2 : #trolley A should enter section 101
+                trolleyLocs[2] = trolleyLocs[1]
+                trolleyMove[2] = 82 # R done only during init since backward walkthru is not yet running 
+                trolleyLocs[1] = 0  # empty
+                trolleyMove[1] = 35 # '#' 
+                motionState[str(slotB)] = '1'
+                slotID = slotB #get trolley B moving, set trolleyB speed to 50
+                startTrolley()
+                if sTrace : print ">>initCnt = " + str(initCnt)
+                
+            elif initCnt == 3 : #trolley B should enter section 100
+                trolleyLocs[1] = slotB
+                trolleyMove[1] = 82 #R
+                motionState[str(slotB)] = '1'
+                trolleyLocs[0] = slotC
+                trolleyMove[0] = 83 #S trolleyC now stopped in section 106 all by itself
+                motionState[str(slotC)] = '0'
+                if sTrace : print ">>initCnt = " + str(initCnt)
+                ####eventID = 101 #change to force first real sweep back from location of trolleyA
+                
+            else:
+                print "Error: initCnt went too far!"
+                
+    #********************************************************************************************
+    else: #regular sequence, 1st pass - updates only one trolley location (rest done in 2nd pass)
+        if eventID == 100:
+            if trolleyLocs[0] > 0:
+                trolleyLocs[1] = trolleyLocs[0]
+                trolleyLocs[0] = 0
+                trolleyMove[0] = 35
+        elif eventID == 101:
+            if trolleyLocs[1] > 0:
+                trolleyLocs[2] = trolleyLocs[1]
+                trolleyLocs[1] = 0
+                trolleyMove[1] = 35
+        elif eventID == 102:
+            if trolleyLocs[7] > 0:
+                trolleyLocs[8] = trolleyLocs[7]
+                trolleyLocs[7] = 0
+                trolleyMove[7] = 35
+            elif trolleyLocs[2] > 0:
+                trolleyLocs[3] = trolleyLocs[2]
+                trolleyLocs[2] = 0
+                trolleyMove[2] = 35
+        elif eventID == 107:
+            if trolleyLocs[3] > 0:
+                trolleyLocs[4] = trolleyLocs[3]
+                trolleyLocs[3] = 0
+                trolleyMove[3] = 35
+            elif trolleyLocs[6] > 0:
+                trolleyLocs[7] = trolleyLocs[6]
+                trolleyLocs[6] = 0
+                trolleyMove[6] = 35
+        elif eventID == 104:
+            if trolleyLocs[4] > 0:
+                trolleyLocs[5] = trolleyLocs[4]
+                trolleyLocs[4] = 0
+                trolleyMove[4] = 35
+        elif eventID == 103:
+            if trolleyLocs[5] > 0:
+                trolleyLocs[6] = trolleyLocs[5]
+                trolleyLocs[5] = 0
+                trolleyMove[5] = 35
+        elif eventID == 106:
+            if trolleyLocs[8] > 0:
+                trolleyLocs[0] = trolleyLocs[8]
+                trolleyLocs[8] = 0
+                trolleyMove[8] = 35
+        else:
+            print "WARNING: unused in range eventID " + str(eventID) + " reported "
+        
+    if eventID <> 105 :
+        if tTrace: print "trolleyAout is " + str(trolleyAout)
+        if tTrace: print "trolleyBout is " + str(trolleyBout)
+        ####if tTrace: print trolleyLocs
+        ####scrollArea.setText(scrollArea.getText() + str(trolleyLocs) + " BOD " + str(eventID) + "\n")
+        tL0 = str(trolleyLocs[0]).zfill(2).rjust(3)
+        tL1 = str(trolleyLocs[1]).zfill(2).rjust(3)
+        tL2 = str(trolleyLocs[2]).zfill(2).rjust(3)
+        tL3 = str(trolleyLocs[3]).zfill(2).rjust(3)
+        tL4 = str(trolleyLocs[4]).zfill(2).rjust(3)
+        tL5 = str(trolleyLocs[5]).zfill(2).rjust(3)
+        tL6 = str(trolleyLocs[6]).zfill(2).rjust(3)
+        tL7 = str(trolleyLocs[7]).zfill(2).rjust(3)
+        tL8 = str(trolleyLocs[8]).zfill(2).rjust(3)
+        trolleyPosition = "[" + tL0 + tL1 + tL2 + tL3 + tL4 + tL5 + tL6 + tL7 + tL8 + "  ] BOD " + str(eventID)
+        if tTrace: print trolleyPosition
+        scrollArea.setText(scrollArea.getText() + trolleyPosition + "\n")
+        
+        doTrolleyThrottleUpdates(eventID)
+
+    return
+    
+###############
+# setThrottle #
+###############
+#sets throttle to actual state
+#
+def setThrottle():
+    global thisID
+    global frwID
+    global slotID
+    global trolleyLocs
+    global trolleyMove
+    global motionState
+    
+    if thisID == 2 :
+        if trolleyLocs[thisID] > 0: #check if section 101 is occupied, checking multiple sections if headed into 102
+            slotID = trolleyLocs[thisID]
+            sSlotID = str(slotID)
+            if (trolleyLocs[3] > 0) or (trolleyLocs[4] > 0) or (trolleyLocs[5] > 0) or (trolleyLocs[6] > 0) or (trolleyLocs[7] > 0) or (trolleyLocs[8] > 0):
+                if motionState[sSlotID] <> '0': #only do if not already stopped
+                    motionState[sSlotID] = '0'
+                    lstopTrolley() #section 102,107,104,or 103 is occupied so long drift stop to clear fouling and insulation points
+                trolleyMove[thisID] = 83 #S
+            else:
+                if motionState[sSlotID] <> '1': #only do if not already running
+                    motionState[sSlotID] = '1'
+                    startTrolley() #set trolley speed to GO
+                trolleyMove[thisID] = 82 #R
+    elif (thisID == 0) or (thisID == 1) :
+        if trolleyLocs[thisID] > 0: #check if section 106 or 100 is occupied
+            slotID = trolleyLocs[thisID]
+            sSlotID = str(slotID)
+            if trolleyLocs[frwID] > 0: #is next section ahead occupied
+                if motionState[sSlotID] <> '0': #only do if not already stopped
+                    motionState[sSlotID] = '0'
+                    lstopTrolley() #set trolley speed to STOP
+                trolleyMove[thisID] = 83 #S
+            else:
+                if motionState[sSlotID] <> '1': #only do if not already running
+                    motionState[sSlotID] = '1'
+                    startTrolley() #set trolley speed to GO
+                trolleyMove[thisID] = 82 #R
+    else:
+        if trolleyLocs[thisID] > 0: #check if any section other than 106,100, or 101 is occupied
+            slotID = trolleyLocs[thisID]
+            sSlotID = str(slotID)
+            if trolleyLocs[frwID] > 0: #next section ahead 102 is occupied
+                if motionState[sSlotID] <> '0': #only do if not already stopped
+                    motionState[sSlotID] = '0'
+                    stopTrolley() #set trolley speed to STOP
+                trolleyMove[thisID] = 83 #S
+            else:
+                if motionState[sSlotID] <> '1': #only do if not already running
+                    motionState[sSlotID] = '1'
+                    startTrolley() #set trolley speed to GO
+                trolleyMove[thisID] = 82 #R
+
+    return
+
+# *****************************************************************
+# * Updates Trolley Throttle Settings Array and displays result   *
+# * using the following characters to show trolley status in each *
+# * section: 35 '#' = empty, 83 'S' = stopped, 82 'R' = running   *
+# *****************************************************************
+def doTrolleyThrottleUpdates(eventID):
+    global thisID
+    global frwID
+    global slotID
+    global trolleyAout
+    global trolleyBout
+    global trolleyLocs
+    global trolleyMove
+    global motionState
+    global suspended
+    
+    print "motionStateList = " + str(motionState.values()) + " BOD " + str(eventID)
+    if initCnt == 3 :
+        # both trolleys must be started before entering this state machine
+        #second pass - set all trolley throttles according to next sections occupancy
+        #work backwards from entry point event
+        
+        if sTrace : print "eventID = " + str(eventID)
+        # +----------------------------------------------------+
+        # |106 | 100 | 101 | 102 | 107 | 104 | 103 | 107 | 102 |
+        # +----+-----+-----+-----+-----+-----+-----+-----+-----+
+        # | 0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |
+        # +----------------------------------------------------+
+        
+        walkCnt = 9 #number of throttle adjustments to go thru from entry point
+        
+        # *******************************************************
+        #select entry point for reverse section walkthru
+        if eventID == 106 :
+            nextID = 0
+        elif eventID == 102 :
+            if trolleyMove[7] == 82: # is 107 an R
+                nextID = 8
+            else :
+                nextID = 3
+        elif eventID == 107 :
+            if trolleyMove[6] == 82: # is 103 an R
+                nextID = 7
+            else :
+                nextID = 4
+        elif eventID == 103 :
+            nextID = 6
+        elif eventID == 104 :
+            nextID = 5
+        elif eventID == 101 :
+            nextID = 2
+        elif eventID == 100 :
+            nextID = 1
+        else :
+            # don't service, unused for trolley BOD
+            print "WARNING: sent address " + str(eventID) + " is unused for trolley BOD!"
+            walkCnt = 0 #skip throttle adjustment part
+        
+        # ***********************************************************************
+        # throttle adjustment going eight steps backward from eventID entry point
+        while walkCnt > 0 : #start eight step backwards process at eventID entry point
+            if suspended :
+                if tTrace: print "suspended"
+                scrollArea.setText(scrollArea.getText() + "suspended 2\n")
+                break
+            walkCnt -= 1 #decrement by one each time until zero
+            if nextID == 0 : #section 106
+                thisID = nextID
+                nextID = 8 # set next ID back one section to do on next loop
+                frwID = 1
+                setThrottle()
+                continue
+            elif nextID == 8 : #section 102
+                thisID = nextID
+                nextID = 7 # set next ID back one section to do on next loop
+                frwID = 0
+                setThrottle()
+                continue
+            elif nextID == 7 : #section 107
+                thisID = nextID
+                nextID = 6 # set next ID back one section to do on next loop
+                frwID = 8
+                setThrottle()
+                continue
+            elif nextID == 6 : #section 103
+                thisID = nextID
+                nextID = 5 # set next ID back one section to do on next loop
+                frwID = 7
+                setThrottle()
+                continue
+            elif nextID == 5 : #section 104
+                thisID = nextID
+                nextID = 4 # set next ID back one section to do on next loop
+                frwID = 6
+                setThrottle()
+                continue
+            elif nextID == 4 : #section 107
+                thisID = nextID
+                nextID = 3 # set next ID back one section to do on next loop
+                frwID = 5
+                setThrottle()
+                continue
+            elif nextID == 3 : #section 102
+                thisID = nextID
+                nextID = 2 # set next ID back one section to do on next loop
+                frwID = 4
+                setThrottle()
+                continue
+            elif nextID == 2 : #section 101
+                thisID = nextID
+                nextID = 1 # set next ID back one section to do on next loop
+                frwID = 3
+                setThrottle()
+                continue
+            elif nextID == 1 : #section 100
+                thisID = nextID
+                nextID = 0 # set next ID back one section to do on next loop
+                frwID = 2
+                setThrottle()
+                continue
+            else :
+                print "Error: major coding problem, should never get here!"
+                
+    throttleCondition = "   " + \
+                        chr(trolleyMove[0]) + ", " + \
+                        chr(trolleyMove[1]) + ", " + \
+                        chr(trolleyMove[2]) + ", " + \
+                        chr(trolleyMove[3]) + ", " + \
+                        chr(trolleyMove[4]) + ", " + \
+                        chr(trolleyMove[5]) + ", " + \
+                        chr(trolleyMove[6]) + ", " + \
+                        chr(trolleyMove[7]) + ", " + \
+                        chr(trolleyMove[8]) + "   "
+    if tTrace: print throttleCondition
+    scrollArea.setText(scrollArea.getText() + throttleCondition + "\n\n")
+
+    return
+    
 # **************************************************
 #class to handle a listener event loconet messages *
 #                                                  *
@@ -719,6 +1178,7 @@ def autoTrolleySequencer(eventAddr, trolleyID):
 #                176 = 0xB0 = OPC_SW_REQ           *
 #                177 = 0xB1 = OPC_SW_REP           *
 #                178 = 0xB2 = OPC_INPUT_REP        *
+#                231 = 0xE7 = OPC_SL_RD_DATA       *
 #                237 = 0xED = OPC_IMM_PACKET       *
 #                                                  *
 # **************************************************
@@ -733,134 +1193,167 @@ class MsgListener(jmri.jmrix.loconet.LocoNetListener):
         global fbAddress2
         global command
         global command2
-        global sectionState
         
+        ##global opcode
+        global newMsgOpCodeHex,ARGS
+        global BFsent
+        global hiAddrByte
+        global loAddrByte
+        global firstBFE7
+        global noSlotID
+        
+        global trolleyCnt
+        global trolleyA,trolleyB,trolleyC
+        global slotA,slotB,slotC
+        global slotID
+        global slotCnt
+        global respCnt0xE7
+        global notAlt0xE7
+        global motionState
+        
+        global msgA
+        global msgB
+        global msgC
+        
+        if iTrace :
+            print
+        if iTrace :
+            print "==>>entering MsgListener <--"
         newMsgOpCodeHex = msg.getOpCodeHex()
         newMsgLength = msg.getNumDataElements()
         accumByteCnt += newMsgLength
         # Note: accumByteCnt background task will read and be reset to zero and plotted every 1 second
         
-        ##print ">>cmd = ", newMsgOpCodeHex, " msg len ",java.lang.Integer.toString(newMsgLength), "bytes"
-        #print "byte 0 = ", java.lang.Integer.toHexString(msg.getElement(0))
-        #print "command 1 field = ", java.lang.Integer(command.text)
-        #print "command 1 field = ", command.text
-        
-        ###################################################################
-        ## only listen for sensor message from trolley BODs (opcode 178) ##
-        ###################################################################
-        if msg.getOpCode() == 178 and ((msg.getElement(2) & 0x10) == 0x10) :
+        if lTrace : print "rcvd " + str(newMsgOpCodeHex)
+        if sTrace : print "rcvd " + str(newMsgOpCodeHex)
+        if bTrace : print "len = ",str(newMsgLength) + " msg = " + str(msg)
+
+        ######################################################################################
+        ## only listen for OPC_INPUT_REP message from trolley BODs (0xB2) going active (hi) ##
+        ######################################################################################
+        if (msg.getOpCode() == 178) and ((msg.getElement(2) & 0x10) == 0x10) :
             eventAddr = msg.sensorAddr() + 1
+            if sTrace : print "== eventAddr = " + str(eventAddr)
             if eventAddr >= 100 and eventAddr <= 107 :
-                print "eventAddr Rcvd = " + str(eventAddr) #gaw-debug
-                autoTrolleySequencer(eventAddr, currentTrolleyID)
+                if bTrace : print "eventAddr Rcvd = " + str(eventAddr) #gaw-debug
+                doTrolleyStatusUpdate(eventAddr)
+                #autoTrolleySequencer(eventAddr)
+                #sectionOccupied = checkSectionState(eventAddr)
+                #if not sectionOccupied :
+                #    doTrolleyStatusUpdate(eventAddr)
                 
-        ########################################
-        ## rework of hillhold collision logic ##
-        ########################################
-        # Special handling for Trolley Hill Hold up warning if trolley entering block 
-        # from Spencer loop and interchange turnout set to normal
-        
-        # if MESSAGE indicates Single Track Westend has gone unoccupied (LS105 == Inactive) <- left STW LS105
-        # and hill hold is UP                                           (LT31 == THROWN)    <- hillhold LT31 is up
-        # and (Trolley Interchange is NORMAL                            (LT1 == CLOSED)     <- turnout LT1 not set for RR Interchange
-        # and Single Track Eastend is occupied                          (LS102 == Active)   <- occupying STE LS102
-        # and single to mains LT2 is NORMAL                             (LT2 == CLOSED)     <- spring turnout LT2 set for Town Main track LS106
-        # give Warning message "Collision Warning! Trolley Hill Hold is Up!"
-        ##if (msg.getOpCode() == 178) and (msg.sensorAddr() + 1 == 105) and ((msg.getElement(2) & 0x10) != 0x10): #watch for incoming message that STW is unoccupied
-        ##    print "STW (LS105) has reported unoccupied"
-        if (msg.getOpCode() == 178) and (msg.sensorAddr() + 1 == 107) and ((msg.getElement(2) & 0x10) != 0x10): #watch for incoming message that STW is unoccupied
-            ####print "STW (LS107) has reported unoccupied"
-            ##if (LT31 == THROWN)
-            if turnouts.provideTurnout("31").getState() == THROWN:
-                print "Hillhold (LT31)is UP"
-                ##if (LT1 == CLOSED)
-                if turnouts.provideTurnout("1").getState() == CLOSED:
-                    print "Turnout (LT1) not set for RR Interchange"
-                    time.sleep(0.5)         # time is in seconds
-                    ##if (LS102 == ACTIVE)
-                    if sensors.provideSensor("102").getState() == ACTIVE:
-                        print "STE (LS102) is reporting occupied"
-                        ##if (LT2 == CLOSED)
-                        if turnouts.provideTurnout("2").getState() == THROWN:
-                            print "Spring turnout (LT2) set for Town Main (LS106)"
-                            hhWarning = "Collision warning! Trolley Hillhold is UP!"
-                            print hhWarning
-                            pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + hhWarning +'" -2 100')
-                            pid.waitFor()
-                            
-        # Handle check boxes
-        if swAddrCheckBox.isSelected() or fbAddrCheckBox.isSelected() or snAddrCheckBox.isSelected() or filterCheckBox.isSelected() or (msg.getOpCode() == 237 and msg.getElement(3) & 0xF0 == 0x30):
-            if filterCheckBox.isSelected():
-                if msg.getOpCode() == 176 or msg.getOpCode() == 177 or msg.getOpCode() == 178:
-                    displayMsg(msg)
-            else:
-                if swAddrCheckBox.isSelected() and msg.getOpCode() == 176:    #msg.turnoutAddr() is an int and address.text is a string
-                    if len(address.text) > 0 or len(address2.text) > 0:
-                        if len(address.text) > 0: #if field let bank code stops code for some reason
-                            if msg.turnoutAddr() == java.lang.Integer.decode(address.text):
-                                displayMsg(msg)
-                        if len(address2.text) > 0: #if field let bank code stops code for some reason
-                            if msg.turnoutAddr() == java.lang.Integer.decode(address2.text):
-                                displayMsg(msg)                         
-                    else:                
-                        displayMsg(msg)
-                if fbAddrCheckBox.isSelected() and msg.getOpCode() == 177:    #msg.turnoutAddr() is an int and address.text is a string
-                    if len(fbAddress.text) > 0 or len(fbAddress2.text) > 0:
-                        if len(fbAddress.text) > 0: #if field let bank code stops code for some reason
-                            if msg.turnoutAddr() == java.lang.Integer.decode(fbAddress.text):
-                                displayMsg(msg)
-                        if len(fbAddress2.text) > 0: #if field let bank code stops code for some reason
-                            if msg.turnoutAddr() == java.lang.Integer.decode(fbAddress2.text):
-                                displayMsg(msg)
-                    else:                
-                        displayMsg(msg)
-                if snAddrCheckBox.isSelected() and msg.getOpCode() == 178:
-                    if len(command.text) > 0 or len(command2.text) > 0 or len(rangeAdd1.text) > 0:
-                        if len(command.text) > 0: #if field let bank code stops code for some reason
-                            if msg.sensorAddr() + 1 == java.lang.Integer.decode(command.text):
-                                displayMsg(msg)                         
-                        if len(command2.text) > 0:
-                            if msg.sensorAddr() + 1 == java.lang.Integer.decode(command2.text):
-                                displayMsg(msg)                         
-                        if len(rangeAdd1.text) > 0 and len(rangeAdd2.text) > 0:
-                            if msg.sensorAddr() + 1 >= java.lang.Integer.decode(rangeAdd1.text) and msg.sensorAddr() + 1 <= java.lang.Integer.decode(rangeAdd2.text):
-                                displayMsg(msg)
-                    else:
-                        displayMsg(msg)
-                # Extended accessory decoder packet format 10AAAAAA 0AAA0AA1 000XXXXX
-                # Address AAA AAAAAA AA
-                if sigChgCheckBox.isSelected():
-                    if msg.getOpCode() == 237 and msg.getElement(3) & 0xF0 == 0x30:
-                    # if msg.getOpCode() == 237 :
-                        DHI = msg.getElement(4)
-                        raddrlo = msg.getElement(5)
-                        raddrhi = msg.getElement(6)
-                        if DHI & 0x02 == 0x02:
-                            raddrhi = raddrhi | 0x80 #set bit 7
-                        if DHI & 0x01 == 0x01:
-                            raddrlo = raddrlo | 0x80
-                        raddrlo = raddrlo << 2 #get hi bits of low address
-                        raddrlo = raddrlo & 0xFC #clear low 2 bits
-                        temp = raddrhi & 0x06
-                        temp = temp >> 1
-                        raddrlo = raddrlo | temp
-                        raddrhi = raddrhi >> 4
-                        raddrhi = ~ raddrhi  #complement
-                        raddrhi = (raddrhi & 0x07) * 256
-                        address = raddrlo + raddrhi + 1
-                        aspect = msg.getElement(7)
-                        aspectName(aspect)
-                        scrollArea.setText(scrollArea.getText() + "Signal Head " + str(address) + " " + aspectColor + " " + str(aspect) + "\n")
-                        if sigSpkChgCheckBox.isSelected():
-                            pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + "Signal Mast " + str(address) + " " + aspectColor + " " + '" -2 100')
-                            pid.waitFor()
-        else: #if no boxes are check just display the message
-            # print "no check boxes"
-            ###cnvMsg = parseMsg.displayMessage(msg)
-            ###java.lang.Runtime.getRuntime().exec('nircmd speak text "' + cnvMsg +'" -2 100')
-            #displayMsg(msg)
-            if not(sigChgCheckBox.isSelected() or snChgCheckBox.isSelected()):
-                print 'newMsgOpCodeHex = ', newMsgOpCodeHex
+        #############################################################
+        ## only listen for slot data response message (opcode 231) ##
+        ## triggered by throttle requests 0xBF #OPC_LOCO_ADR       ##
+        #############################################################
+        if (msg.getOpCode() == 0xE7) and BFsent and (msg.getElement(4) == hiAddrByte) and (msg.getElement(9) == loAddrByte) : 
+        ####if msg.getOpCode() == 0xE7 :
+        ####if BFsent and (hiAddrByte == ARGS[4]) and (loAddrByte == ARGS[9]) :
+            opcode = msg.getOpCode()
+            if bTrace :
+                print "opcode = " + hex(opcode)
+            if sTrace : print "opcode = " + hex(opcode)
+            ARGS[1] = msg.getElement(1)
+            ARGS[2] = msg.getElement(2)
+            ARGS[3] = msg.getElement(3)
+            ARGS[4] = msg.getElement(4)
+            ARGS[5] = msg.getElement(5)
+            ARGS[6] = msg.getElement(6)
+            ARGS[7] = msg.getElement(7)
+            ARGS[8] = msg.getElement(8)
+            ARGS[9] = msg.getElement(9)
+            ARGS[10] = msg.getElement(10)
+            ARGS[11] = msg.getElement(11)
+            ARGS[12] = msg.getElement(12)
+            print "2 = " + str(ARGS[2])
+            print "4 = " + str(hex(ARGS[4]))
+            print "9 = " + str(hex(ARGS[9]))
+            # check for E7 (opcode 231) response message after sending a BF query message (opcode 191)
+            ####if BFsent and (hiAddrByte == ARGS[4]) and (loAddrByte == ARGS[9]) :
+            if bTrace :
+                print "BFsent4 = " + str(BFsent)
+            slotID = ARGS[2] #set for later use
+            if sTrace : print ">>slotID from ARGS[2] = " + str(ARGS[2])
+            if firstBFE7 :
+                firstBFE7 = False #only printed on first BFE7 pair
+                if bTrace : print "2nd-trolleyA = " + str(trolleyA) + " and maps to slot " + str(slotA)
+                if bTrace : print "2nd-trolleyB = " + str(trolleyB) + " and maps to slot " + str(slotB)
+                if bTrace : print "2nd-trolleyC = " + str(trolleyC) + " and maps to slot " + str(slotC)
+                if bTrace : print "E7slotID = " + hex(slotID)
+                
+        ####################################################
+        ## prepare for automatic trolley sequencing if on ##
+        ####################################################
+        ####if BFsent :
+            if respCnt0xE7 != -1 :
+                respCnt0xE7 += 1
+                if bTrace : print "respCnt0xE7 = " + str(respCnt0xE7)
+                
+                if respCnt0xE7 == 1 :
+                    if bTrace : print "respCnt0xE7 = " + str(respCnt0xE7)
+                    ####slotID = slotA #setup for update and inuse requests
+                    motionState[str(slotID)] = '0' #inital state is "stopped"
+                    slotA = slotID #store slotA value for later use
+                    msgA = "trolleyA = " + str(trolleyA) + " and maps to slot " + str(slotA)
+                    setSlotInuse() #got response to 0xBF request, now send 0xBA to set slot INUSE
+                elif respCnt0xE7 == 2 :
+                    BFsent = False #ignore any 0xE7s until this stuff is done
+                    if sTrace : print "BFsent is now False"
+                    writeSlotData() #got response to 0xBA request, now send 0xEF to set  INUSE slot data
+                    print msgA
+                    scrollArea.setText(scrollArea.getText() + msgA + "\n")
+                    #>>>ringBell()
+                    blinkOn() #blink headlight 5 times and leave on
+                    #>>>time.sleep(5.0) #wait 3 secs before listening for next 0xE7
+                    requestSlot(trolleyB) #get slot for next trolley address 
+                elif respCnt0xE7 == 3 :
+                    if bTrace : print "respCnt0xE7 = " + str(respCnt0xE7)
+                    ####slotID = slotB #setup for update and inuse requests
+                    motionState[str(slotID)] = '0' #inital state is "stopped"
+                    setSlotInuse()  #response to 0xBF request, follow by sending 0xBA to set slot INUSE
+                    slotB = slotID #store slotB value for later use
+                    msgB = "trolleyB = " + str(trolleyB) + " and maps to slot " + str(slotB)
+                elif respCnt0xE7 == 4 :
+                    BFsent = False #ignore any 0xE7s until this stuff is done
+                    if sTrace : print "BFsent is now False"
+                    writeSlotData()
+                    print msgB
+                    scrollArea.setText(scrollArea.getText() + msgB + "\n")
+                    #>>>ringBell()
+                    blinkOn() #blink headlight 5 times and leave on
+                    #>>>time.sleep(5.0) #wait 3 secs before listening for next 0xE7
+                    requestSlot(trolleyC)
+                elif respCnt0xE7 == 5 :
+                    if bTrace : print "respCnt0xE7 = " + str(respCnt0xE7)
+                    ####slotID = slotC #setup for update and inuse requests
+                    motionState[str(slotID)] = '0' #inital state is "stopped"
+                    setSlotInuse()  #response to 0xBF request, follow by sending 0xBA to set slot INUSE
+                    slotC =  slotID #store slotC value for later use
+                    msgC = "trolleyC = " + str(trolleyC) + " and maps to slot " + str(slotC)
+                else : # can only be respCnt0xE7 == 6
+                    BFsent = False #ignore any 0xE7s until this stuff is done
+                    print "Last 0xBF done, no more will be sent"
+                    #ignore 0xE7 response to 0xBA request, follow by sending 0xEF to set INUSE slot data
+                    writeSlotData()
+                    print msgC
+                    scrollArea.setText(scrollArea.getText() + msgC + "\n")
+                    #>>>ringBell()
+                    blinkOn() #blink headlight 5 times and leave on
+                    #>>>time.sleep(5.0) #wait 3 secs before announcing done
+                    respCnt0xE7 = -1 #all done setting slots
+                    
+                    ATSmsg = "The Automatic Trolley Sequencer is now running."
+                    print ATSmsg
+                    scrollArea.setText(scrollArea.getText() + ATSmsg + "\n")
+                    # this is where you select the voice synthesizer (speak, espeak, or nircmd)
+                    if snSpkChgCheckBox.isSelected():
+                        #pid = java.lang.Runtime.getRuntime().exec(["speak", msg])
+                        # #pid = java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
+                        pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + ATSmsg + '" -2 100')
+                        pid.waitFor()
+                        
+        if oTrace : print "<<==exiting MsgListener"
+        inE7 = False
         return
 
 # *************************************************************************
@@ -900,68 +1393,6 @@ def displayTxt(msg) :
     
     return
     
-# ******************************************************************************
-def aspectName(num):
-    global aspectColor
-    
-    if num == 0:
-        aspectColor = "Stop Signal, Red"
-        return
-    if num == 1:
-        aspectColor = "Yellow"
-        return
-    if num == 2:
-        aspectColor = "Green"
-        return
-    if num == 3:
-        aspectColor = "Lunar"
-        return
-    if num == 4:
-        aspectColor = "Restricting, Flash Red"
-        return
-    if num == 5:
-        aspectColor = "Flash Yellow"
-        return
-    if num == 6:
-        aspectColor = "Flash Green"
-        return
-    if num == 7:
-        aspectColor = "Flash Lunar"
-        return
-    if num == 8:
-        aspectColor = "Dark"
-        return
-    # added for NVMR Layout
-    if num == 29:
-        aspectColor = "Clear, Green over Red"
-        return
-    if num == 27:
-        aspectColor = "Approach Limited, Yellow over Flash Green"
-        return
-    if num == 20:
-        aspectColor = "Limited Clear, Red over Flash Green"
-        return
-    if num == 25:
-        aspectColor = "Approach Medium, Yellow over Green"
-        return
-    if num == 23:
-        aspectColor = "Advance Approach, Flash Yellow over Red"
-        return
-    if num == 15:
-        aspectColor = "Medium Clear, Red over Green"
-        return
-    if num == 22:
-        aspectColor = "Approach Slow, Yellow over Yellow"
-        return
-    if num == 21:
-        aspectColor = "Approach, Yellow over Red"
-        return
-    if num == 11:
-        aspectColor = "Red over Flash Yellow, Medium Approach"
-        return
-    aspectColor = "Unknown Aspect Color"
-    return
-    
 # ##########################################################################
 # ************* Start of Main Setup
 # ##########################################################################
@@ -980,11 +1411,20 @@ enterButton.actionPerformed = whenEnterButtonClicked
 resyncButton = javax.swing.JButton("Resync")
 resyncButton.actionPerformed = whenResyncButtonClicked
 
-clearButton = javax.swing.JButton("Clear")
-clearButton.actionPerformed = whenClearButtonClicked
+saveTaddrsButton = javax.swing.JButton("SaveTaddresses")
+saveTaddrsButton.actionPerformed = whenSaveTaddressesButtonClicked
+
+#clearButton = javax.swing.JButton("Clear")
+#clearButton.actionPerformed = whenClearButtonClicked
 
 quitButton = javax.swing.JButton("Quit")
 quitButton.actionPerformed = whenQuitButtonClicked
+
+tgoButton = javax.swing.JButton("T1go")
+tgoButton.actionPerformed = whenTgoButtonClicked
+
+tstopButton = javax.swing.JButton("AllTstop")
+tstopButton.actionPerformed = whenTstopAllButtonClicked
 
 # ====================================
 # create checkboxes and define action
@@ -1049,13 +1489,38 @@ command2.setToolTipText("Number from 1 to 2010")
 rangeAdd1 = javax.swing.JTextField(5)    #sized to hold 5 characters
 rangeAdd1.setToolTipText("Start address")
 
-# create another text field for a range address
+# create another text field for a trolleyB
 rangeAdd2 = javax.swing.JTextField(5)    #sized to hold 5 characters
 rangeAdd2.setToolTipText("End address")
+
+# create another text field for a trolleyA
+trolleyAaddr = javax.swing.JTextField(5)    #sized to hold 5 characters
+trolleyAaddr.setToolTipText("1st Trolley Address")
+
+# create another text field for a trolleyB
+trolleyBaddr = javax.swing.JTextField(5)    #sized to hold 5 characters
+trolleyBaddr.setToolTipText("2nd Trolley Address")
+
+# create another text field for a trolleyC
+trolleyCaddr = javax.swing.JTextField(5)    #sized to hold 5 characters
+trolleyCaddr.setToolTipText("3rd Trolley Address")
+
+# create another text field for a trolleyA
+trolleyAspeed = javax.swing.JTextField(3)    #sized to hold 3 characters
+trolleyAspeed.setToolTipText("1st Trolley Speed")
+
+# create another text field for a trolleyB
+trolleyBspeed = javax.swing.JTextField(3)    #sized to hold 3 characters
+trolleyBspeed.setToolTipText("2nd Trolley Speed")
+
+# create another text field for a trolleyC
+trolleyCspeed = javax.swing.JTextField(3)    #sized to hold 3 characters
+trolleyCspeed.setToolTipText("3rd Trolley Speed")
 
 # create a text area
 scrollArea = javax.swing.JTextArea(10, 45)    #define a text area with it's size
 scrollArea.getCaret().setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE); # automatically scroll to last message
+scrollArea.font=Font("monospaced", Font.PLAIN, 14)
 # scrollArea.setText("Put any init text here\n")
 scrollField = javax.swing.JScrollPane(scrollArea) #put text area in scroll field
 scrollField.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER)
@@ -1141,10 +1606,33 @@ ckBoxPanel.add(sigSpkChgCheckBox)
 
 # ---------------------------------------------------------------------------------------
 butPanel = javax.swing.JPanel()
+####butPanel.setLayout(java.awt.FlowLayout(2))    #2 is right align for FlowLayout
 butPanel.setLayout(javax.swing.BoxLayout(butPanel, javax.swing.BoxLayout.PAGE_AXIS))
-butPanel.add(resyncButton)
+####butPanel.add(resyncButton)
+####butPanel.add(javax.swing.Box.createVerticalStrut(20)) #empty vertical space between buttons
+#butPanel.add(clearButton) #currently inoperative and appears to be no longer needed
+
+#butPanel.add(javax.swing.Box.createVerticalStrut(20)) #empty vertical space between buttons
+butPanel.add(saveTaddrsButton)
+butPanel.add(javax.swing.Box.createVerticalStrut(10)) #empty vertical space between buttons
+butPanel.add(javax.swing.JLabel("T1 Address"))
+butPanel.add(trolleyAaddr)
+butPanel.add(javax.swing.JLabel("Speed"))
+butPanel.add(trolleyAspeed)
+butPanel.add(javax.swing.Box.createVerticalStrut(10)) #empty vertical space between buttons
+butPanel.add(javax.swing.JLabel("T2 Address"))
+butPanel.add(trolleyBaddr)
+butPanel.add(javax.swing.JLabel("Speed"))
+butPanel.add(trolleyBspeed)
+butPanel.add(javax.swing.Box.createVerticalStrut(10)) #empty vertical space between buttons
+butPanel.add(javax.swing.JLabel("T3 Address"))
+butPanel.add(trolleyCaddr)
+butPanel.add(javax.swing.JLabel("Speed"))
+butPanel.add(trolleyCspeed)
+butPanel.add(javax.swing.Box.createVerticalStrut(10)) #empty vertical space between buttons
+butPanel.add(tgoButton)
 butPanel.add(javax.swing.Box.createVerticalStrut(20)) #empty vertical space between buttons
-butPanel.add(clearButton)
+butPanel.add(tstopButton)
 
 # ---------------------------------------------------------------------------------------
 buttonPanel = javax.swing.JPanel()
@@ -1156,8 +1644,8 @@ blankPanel.setLayout(java.awt.BorderLayout())
 
 entryPanel = javax.swing.JPanel()
 entryPanel.setLayout(javax.swing.BoxLayout(entryPanel, javax.swing.BoxLayout.LINE_AXIS))
-entryPanel.add(temppanel1)
-entryPanel.add(ckBoxPanel)
+####entryPanel.add(temppanel1)
+####entryPanel.add(ckBoxPanel)
 entryPanel.add(buttonPanel)
 entryPanel.add(blankPanel)
 
@@ -1179,50 +1667,15 @@ bottomPanel = javax.swing.JPanel()
 # ------------------------------------
 # create a time series charting panel
 # ------------------------------------
-dataset = TimeSeriesCollection()
-
-hzline80 = TimeSeries("80% Used", Millisecond)
-hzline60 = TimeSeries("60% Used", Millisecond)
-hzline30 = TimeSeries("30% Used", Millisecond)
-hzline15 = TimeSeries("15% Used", Millisecond)
-if doSecsPlot:
-    series = TimeSeries("All LocoNet Traffic", Millisecond)
-if doAvgPlot:
-    avgAccum = TimeSeries(str(secs2avg) + " Second Byte Average", Millisecond)
-
-#info for operator sent to system console
-print '80% Used = 1646 bytes'
-print '60% Used = 1234 bytes'
-print '30% Used = 617 bytes'
-print '15% Used = 309 bytes'
-
-dataset.addSeries(hzline80)
-dataset.addSeries(hzline60)
-dataset.addSeries(hzline30)
-dataset.addSeries(hzline15)
-if doSecsPlot:
-    dataset.addSeries(series)
-if doAvgPlot:
-    dataset.addSeries(avgAccum)
-
-chart = createChart(dataset)
-chartPanel = ChartPanel(chart)
-
 # ----------------------------------
 # Put contents in frame and display
 # ----------------------------------
 fr.contentPane.add(topPanel)
 fr.contentPane.add(midPanel)
 fr.contentPane.add(bottomPanel)
-if doAvgPlot or doSecsPlot:
-    fr.contentPane.add(chartPanel)
 fr.pack()
 #fr.show() #depreciated
 fr.setVisible(True)
-
-# ---------------------------------------------------------------------------------------
-# Init for ATS code
-# ---------------------------------------------------------------------------------------
 
 # ---------------------------------
 # create and start LocoNet listener
@@ -1239,11 +1692,12 @@ jmri.jmrix.loconet.LnTrafficController.instance().addLocoNetListener(0xFF, lnLis
 #time.sleep(0.1) # sleep for tenth of a second
 #series.add(Millisecond(), 0.0)    #set third point to min scale range value
 
-scrollArea.setText(scrollArea.getText() + mainStartTime + "\n")
-scrollArea.setText(scrollArea.getText() + "[1]" + time.strftime('%X %x %Z') + "\n")
+if bTrace : scrollArea.setText(scrollArea.getText() + mainStartTime + "\n")
+else : scrollArea.setText(scrollArea.getText() + "Init started\n")
+if bTrace : scrollArea.setText(scrollArea.getText() + "[1]" + time.strftime('%X %x %Z') + "\n")
 
 # **************************************************************
-# populate Sensor Message ID List from "LnSnrMsgList.csv" file *
+# populate PropertyChangeListener with Sensor Message pointers *
 # **************************************************************
 snrStatusArr = {} # dictionary of sensor systemNames and status
 for systemName in sensors.getSystemNameList():
@@ -1258,64 +1712,63 @@ for systemName in sensors.getSystemNameList():
 
 scrollArea.setText(scrollArea.getText() + str(len(snrStatusArr)) + " short detectors\n")
 
-scrollArea.setText(scrollArea.getText() + "[2]" + time.strftime('%X %x %Z') + "\n")
-scrollArea.setText(scrollArea.getText() + "[3]" + time.strftime('%X %x %Z') + "\n")
-scrollArea.setText(scrollArea.getText() + "[4]" + time.strftime('%X %x %Z') + "\n")
-scrollArea.setText(scrollArea.getText() + "[5]" + time.strftime('%X %x %Z') + "\n")
+if bTrace : scrollArea.setText(scrollArea.getText() + "[2]" + time.strftime('%X %x %Z') + "\n")
+if bTrace : scrollArea.setText(scrollArea.getText() + "[3]" + time.strftime('%X %x %Z') + "\n")
+if bTrace : scrollArea.setText(scrollArea.getText() + "[4]" + time.strftime('%X %x %Z') + "\n")
+if bTrace : scrollArea.setText(scrollArea.getText() + "[5]" + time.strftime('%X %x %Z') + "\n")
 
 scanPntr = 0 # set starting value of scanning pointer to point to first entry
-scrollArea.setText(scrollArea.getText() + "[6]" + time.strftime('%X %x %Z') + "\n")
-# init done
-scrollArea.setText(scrollArea.getText()+"[init ended]"+time.strftime('%X %x %Z')+"\n")
-scrollArea.setText(scrollArea.getText()+"Init done\n")
-print 'init done'
-# #########################################################################
-# ************* Start of Background Tasks from Main and other final steps #
-# #########################################################################
+if bTrace : scrollArea.setText(scrollArea.getText() + "[6]" + time.strftime('%X %x %Z') + "\n")
 
-###time.sleep(15.0) #wait 15 secs to complete JMRI startup before launching background tasks
-###
-if doAvgPlot or doSecsPlot:
-    thread.start_new_thread(plotUpdater, ())
-time.sleep(1.0) #wait 1 seconds before starting scanReporter after plotUpdater started
-###
-thread.start_new_thread(scanReporter, ())
-# ###############################################################################################
-# send a LocoNet GPON to force reporting of all sensor status conditions so we can collect them #
-# this can now go away since JMRI is holding all stati for use                                  #
-# ###############################################################################################
-print 'starting status querying'
-print time.strftime('%X %x %Z')
-powermanager.setPower(jmri.PowerManager.ON)
-print time.strftime('%X %x %Z')
-#time.sleep(15.0) # (handled elsewhere) wait 15 secs to complete sensor reporting
-print 'status reporting done'
-print time.strftime('%X %x %Z')
-print 'main done'
-print os.getcwd() # reports where to put jfreechart & jcommon jar files
-    
-# ########################################
-# my default startup test settings - gaw #
-# ########################################
+# ******************************************************
+# * readin new trolley addresses if config file exists *
+# ******************************************************
+print "attempting to read in trolley addresses read in from " + trolleyAddressesFile
+if os.path.isfile(trolleyAddressesFile):
+    fp=open(trolleyAddressesFile,'r')
+    trolleyA=int(fp.readline())
+    print "read trolleyA as "+ str(trolleyA)
+    trolleyB=int(fp.readline())
+    print "read trolleyB as "+ str(trolleyB)
+    trolleyC=int(fp.readline())
+    print "read trolleyC as "+ str(trolleyC)
+    maxSpeed[0] = int(fp.readline())
+    print "read maxSpeed[0] as "+ str(maxSpeed[0])
+    maxSpeed[1] = int(fp.readline())
+    print "read maxSpeed[1] as "+ str(maxSpeed[1])
+    maxSpeed[2] = int(fp.readline())
+    print "read maxSpeed[2] as "+ str(maxSpeed[2])
+    fp.close()
+    print "trolley addresses and speeds read in from " + trolleyAddressesFile
+else:
+    print "saveTaddresses.cfg file did not exist, using defaults"
+trolleyAaddr.text = str(trolleyA)
+trolleyBaddr.text = str(trolleyB)
+trolleyCaddr.text = str(trolleyC)
+trolleyAspeed.text = str(maxSpeed[0])
+trolleyBspeed.text = str(maxSpeed[1])
+trolleyCspeed.text = str(maxSpeed[2])
+
+# init done
+if bTrace : scrollArea.setText(scrollArea.getText()+"[init ended]"+time.strftime('%X %x %Z')+"\n")
+else : scrollArea.setText(scrollArea.getText()+"Init done\n")
+print 'init done'
+
+# ##########################################
+# # my default startup test settings - gaw #
+# ##########################################
 rangeAdd1.text = '3000' #lower address boundary 3000
 rangeAdd2.text = '4080' #upper address boundary 4080
 snChgCheckBox.setSelected(True) #sensor change message display on
 snSpkChgCheckBox.setSelected(True) #sensor change message spoken on
-    
-# ##############################################
-# display and speak ready for business message #
-# ##############################################
-##msg = sensors.getSensor(readySensorSystemName).comment
-msg = "The Automatic Trolley Sequencer is now running."
-    
-scrollArea.setText(scrollArea.getText() + msg + "\n")
-# this is where you select the voice synthesizer (speak, espeak, or nircmd)
-if snSpkChgCheckBox.isSelected():
-    #pid = java.lang.Runtime.getRuntime().exec(["speak", msg])
-    #pid = java.lang.Runtime.getRuntime().exec(["C:\Program Files (x86)\eSpeak\command_line\espeak", msg])
-    pid = java.lang.Runtime.getRuntime().exec('nircmd speak text "' + msg + '" -2 100')
-    pid.waitFor()
 
-# ###########################
-# ************* End of Main #
-# ###########################
+# #########################################################################
+# ************* Start of Background Tasks from Main and other final steps #
+# #########################################################################
+#send 1st 0xBF (ask for a slot)
+requestSlot(trolleyA)
+if bTrace : print "BFsent-A = " + str(BFsent)
+    
+# ###########################################
+# # ************* End of Main ************* #
+# ###########################################
