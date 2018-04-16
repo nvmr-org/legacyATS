@@ -903,23 +903,41 @@ def checkSectionState(eventAddr) :
     elif eventAddr == 101 :
         if trolleyLocs[2] > 0 : # greater means occupied
             return True
-    elif eventAddr == 102 :
+    elif eventAddr == 118 :
         if trolleyLocs[3] > 0 : # greater means occupied
             return True
-    elif eventAddr == 107 :
+    elif eventAddr == 116 :
         if trolleyLocs[4] > 0 : # greater means occupied
             return True
-    elif eventAddr == 104 :
+    elif eventAddr == 119 :
         if trolleyLocs[5] > 0 : # greater means occupied
             return True
-    elif eventAddr == 103 :
+    elif eventAddr == 102 :
         if trolleyLocs[6] > 0 : # greater means occupied
             return True
     elif eventAddr == 107 :
         if trolleyLocs[7] > 0 : # greater means occupied
             return True
-    elif eventAddr == 102 :
+    elif eventAddr == 104 :
         if trolleyLocs[8] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 103 :
+        if trolleyLocs[9] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 107 :
+        if trolleyLocs[10] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 102 :
+        if trolleyLocs[11] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 120 :
+        if trolleyLocs[12] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 123 :
+        if trolleyLocs[13] > 0 : # greater means occupied
+            return True
+    elif eventAddr == 121 :
+        if trolleyLocs[14] > 0 : # greater means occupied
             return True
     else :
         return False
@@ -1041,7 +1059,13 @@ def doTrolleyStatusUpdate(eventID):
         tL6 = str(trolleyLocs[6]).zfill(2).rjust(3)
         tL7 = str(trolleyLocs[7]).zfill(2).rjust(3)
         tL8 = str(trolleyLocs[8]).zfill(2).rjust(3)
-        trolleyPosition = "[" + tL0 + tL1 + tL2 + tL3 + tL4 + tL5 + tL6 + tL7 + tL8 + "  ] BOD " + str(eventID)
+        tL9 = str(trolleyLocs[9]).zfill(2).rjust(3)
+        tL10 = str(trolleyLocs[10]).zfill(2).rjust(3)
+        tL11 = str(trolleyLocs[11]).zfill(2).rjust(3)
+        tL12 = str(trolleyLocs[12]).zfill(2).rjust(3)
+        tL13 = str(trolleyLocs[13]).zfill(2).rjust(3)
+        tL14 = str(trolleyLocs[14]).zfill(2).rjust(3)
+        trolleyPosition = "[" + tL0 + tL1 + tL2 + tL3 + tL4 + tL5 + tL6 + tL7 + tL8 + tL9 + tL10 + tL11 + tL12 + tL13 + tL14 + "  ] BOD " + str(eventID)
         if tTrace: print trolleyPosition
         scrollArea.setText(scrollArea.getText() + trolleyPosition + "\n")
         
